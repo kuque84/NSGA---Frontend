@@ -38,7 +38,7 @@ const NavBar = () => {
                 </div>
             </div>
             {isOpen && (
-                <div className='fixed right-0 z-20 bg-neutral-900 w-full p-12 flex flex-col justify-center items-center lg:hidden dark:text-black text-white'>
+                <div className='fixed right-0 z-20 bg-neutral-900 w-full p-12 flex flex-col justify-center items-center lg:hidden dark:text-white text-black'>
                     <ul>
                         {navItems.map((item, index) => (
                             <li key={index} className='py-4'>
