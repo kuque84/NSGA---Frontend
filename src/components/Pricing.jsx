@@ -15,7 +15,7 @@ const Pricing = () => {
                   {option.title}
                   {option.title === 'Pro' && <span className="bg-gradient-to-r from-cyan-500 to-blue-800 text-transparent bg-clip-text text-xl mb-4 ml-2">(Most Popular)</span>}
                 </p>
-                <p className="mb-8">
+                <div className="mb-8">
                   <span className="text-5xl mt-6 mr-2">{option.price}</span> 
                   <span className="text-neutral-400 -tracking-tight">/month</span>
                   <ul>
@@ -26,8 +26,8 @@ const Pricing = () => {
                       </li>
                     ))}
                   </ul>
-                  <a href="#" className="inline-flex justify-center items-center text-center w-full h-12 p-5 mt-20 tracking-tight text-xl hover:bg-cyan-500 border border-cyan-500 rounded-lg transition duration-200">Suscribe</a>
-                </p>
+                  <a href="#" className="inline-flex justify-center items-center text-center w-full h-12 p-5 mt-20 tracking-tight text-xl hover:bg-cyan-600 border border-blue-800 rounded-lg transition duration-200">Suscribe</a>
+                </div>
               </div>
             </div>
           ))}

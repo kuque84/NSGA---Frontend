@@ -1,5 +1,6 @@
 import video1 from '../assets/video1.mp4';
 import video2 from '../assets/video2.mp4';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
   return (
@@ -14,9 +15,9 @@ const HeroSection = () => {
         El Nuevo Sistema de Gestión Académica (NSGA) es una propuesta para desarrollar una aplicación web diseñada para optimizar y mejorar la gestión académica del IPEM N° 168 "Diego de Rojas" en Villa General Belgrano, Córdoba, Argentina. Esta aplicación se centra en la carga y gestión de datos, la automatización de procesos administrativos y la centralización de la información académica, con el objetivo de mejorar la eficiencia y facilitar el acceso a la información para alumnos, profesores y personal administrativo.
         </p>
         <div className="flex justify-center my-10">
-            <a href="#" className='bg-gradient-to-r from-cyan-500 to-blue-800 py-3 px-4 mx-3 rounded-md'>
-                Iniciar Sesión
-            </a>
+            <Link to="/login" className='bg-gradient-to-r from-cyan-500 to-blue-800 py-3 px-3 rounded-md'>
+                Inciar Sesión
+            </Link>
             <a href="#" className='py-3 px-4 mx-3 rounded-md'>
                 Documentación
             </a>

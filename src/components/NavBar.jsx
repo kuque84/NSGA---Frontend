@@ -1,15 +1,21 @@
+import React, { useContext } from 'react';
 import {Menu, X} from 'lucide-react'
 import { useState } from 'react'
 import logo from '../img/logo.png'
 import { navItems } from '../constants'
+import { Link } from 'react-router-dom'
+import { useUserContext } from '../context/userContext';
+import { CiUser } from "react-icons/ci";
+
 
 const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false)
-
+    const { user, isAuthenticated } = useUserContext();
     const handleMenu = () => {
-        console.log('click')
         setIsOpen(!isOpen)
     }
+
+    console.log(isAuthenticated)
 
   return (
     <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-b border-neutral-700/80">
@@ -27,9 +33,13 @@ const NavBar = () => {
                     ))}
                 </ul>
                 <div className="hidden lg:flex justify-center space-x-12 items-center">
-                    <a href="#" className='bg-gradient-to-r from-cyan-500 to-blue-800 py-2 px-3 rounded-md'>
-                    Inciar Sesión
-                    </a>
+                    {
+                        isAuthenticated
+                        ? <CiUser className='text-2xl text-blue-800 '/>
+                        : <Link to="/login" className='bg-gradient-to-r from-cyan-500 to-blue-800 py-2 px-3 rounded-md'>
+                            Inciar Sesión
+                        </Link>
+                    }
                 </div>
                 <div className="lg:hidden md:flex flex-col justify-end">
                     <button onClick={handleMenu}>
@@ -38,7 +48,7 @@ const NavBar = () => {
                 </div>
             </div>
             {isOpen && (
-                <div className='fixed right-0 z-20 bg-neutral-900 w-full p-12 flex flex-col justify-center items-center lg:hidden dark:text-white text-black'>
+                <div className='fixed right-0 z-20 bg-neutral-900 w-full p-12 flex flex-col justify-center items-center lg:hidden text-white'>
                     <ul>
                         {navItems.map((item, index) => (
                             <li key={index} className='py-4'>
@@ -47,9 +57,13 @@ const NavBar = () => {
                         ))}
                     </ul>
                     <div className='flex justify-center space-x-12 items-center'>
-                        <a href="#" className='bg-gradient-to-r from-cyan-500 to-blue-800 py-2 px-3 rounded-md'>
+                    {
+                        isAuthenticated
+                        ? <CiUser className='text-2xl text-blue-800 '/>
+                        : <Link to="/login" className='bg-gradient-to-r from-cyan-500 to-blue-800 py-2 px-3 rounded-md'>
                             Inciar Sesión
-                        </a>
+                        </Link>
+                    }
                     </div>
                 </div>
                 )}
