@@ -1,21 +1,39 @@
 import React, { useContext } from 'react';
-import {Menu, X} from 'lucide-react'
+import {LogOut, Menu, X} from 'lucide-react'
 import { useState } from 'react'
 import logo from '../img/logo.png'
 import { navItems } from '../constants'
 import { Link } from 'react-router-dom'
 import { useUserContext } from '../context/userContext';
 import { CiUser } from "react-icons/ci";
+import { useLogout } from '../functions/logout.function';
+import { useEffect } from 'react';
 
 
 const NavBar = () => {
     const [isOpen, setIsOpen] = useState(false)
-    const { user, isAuthenticated } = useUserContext();
+    const { user, setUser, isAuthenticated, setIsAuthenticated } = useUserContext();
+    const logout = useLogout()
+  
+    useEffect(() => {
+      if (localStorage.getItem('user') === null || localStorage.getItem('isAuthenticated') === null) {
+        return
+      }
+      setUser(localStorage.getItem('user'))
+      setIsAuthenticated(localStorage.getItem('isAuthenticated'))
+      console.log("NavBar.jsx User ", localStorage.getItem('user'), " Autenticado: " ,localStorage.getItem('isAuthenticated'));
+    }, []);
+
     const handleMenu = () => {
         setIsOpen(!isOpen)
     }
 
-    console.log(isAuthenticated)
+    const handleLogout = () => {
+        console.log("Logout")
+        logout()
+        // redirigir a la página de inicio
+        window.location.href = '/'        
+    }
 
   return (
     <nav className="sticky top-0 z-50 py-3 backdrop-blur-lg border-b border-neutral-700/80">
@@ -35,7 +53,7 @@ const NavBar = () => {
                 <div className="hidden lg:flex justify-center space-x-12 items-center">
                     {
                         isAuthenticated
-                        ? <CiUser className='text-2xl text-blue-800 '/>
+                        ? <CiUser onClick={handleLogout} className='text-2xl text-blue-800 '/>
                         : <Link to="/login" className='bg-gradient-to-r from-cyan-500 to-blue-800 py-2 px-3 rounded-md'>
                             Inciar Sesión
                         </Link>
@@ -59,7 +77,7 @@ const NavBar = () => {
                     <div className='flex justify-center space-x-12 items-center'>
                     {
                         isAuthenticated
-                        ? <CiUser className='text-2xl text-blue-800 '/>
+                        ? <CiUser onClick={handleLogout} className='text-2xl text-blue-800 '/>
                         : <Link to="/login" className='bg-gradient-to-r from-cyan-500 to-blue-800 py-2 px-3 rounded-md'>
                             Inciar Sesión
                         </Link>

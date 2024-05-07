@@ -5,20 +5,22 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from '../context/userContext';
+import { LogIn } from "lucide-react";
 
 
 const Login = () => {
     const [dni, setDni] = useState('')
     const [password, setPassword] = useState('')
-    const { user, isAuthenticated, setIsAuthenticated } = useUserContext();
+    const { user, setUser, isAuthenticated, setIsAuthenticated } = useUserContext();
     const navigate = useNavigate()
 
     const handleLogin = async () => {
         if(dni && password){
             const loginIn = await uselogin(dni, password)
+            setUser(localStorage.getItem('user'))
             setIsAuthenticated(true)
             if (loginIn) {
-                navigate("/")
+                navigate("/home")
             }
         }
     }
