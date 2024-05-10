@@ -14,7 +14,7 @@ import user5 from "../assets/profile-pictures/user5.jpg";
 import user6 from "../assets/profile-pictures/user6.jpg";
 
 export const navItems = [
-  { label: "Alumnos", href: "/" },
+  { label: "Alumnos", href: "alumnos" },
   { label: "Previas", href: "#" },
   { label: "Exámenes", href: "#" },
   { label: "Actas y Permisos", href: "#" },
@@ -23,108 +23,108 @@ export const navItems = [
 
 export const testimonials = [
   {
-    user: "John Doe",
-    company: "Stellar Solutions",
-    image: user1,
-    text: "I am extremely satisfied with the services provided. The team was responsive, professional, and delivered results beyond my expectations.",
-  },
-  {
-    user: "Jane Smith",
-    company: "Blue Horizon Technologies",
-    image: user2,
-    text: "I couldn't be happier with the outcome of our project. The team's creativity and problem-solving skills were instrumental in bringing our vision to life",
-  },
-  {
-    user: "David Johnson",
-    company: "Quantum Innovations",
-    image: user3,
-    text: "Working with this company was a pleasure. Their attention to detail and commitment to excellence are commendable. I would highly recommend them to anyone looking for top-notch service.",
-  },
-  {
-    user: "Ronee Brown",
-    company: "Fusion Dynamics",
-    image: user4,
-    text: "Working with the team at XYZ Company was a game-changer for our project. Their attention to detail and innovative solutions helped us achieve our goals faster than we thought possible. We are grateful for their expertise and professionalism!",
-  },
-  {
-    user: "Michael Wilson",
-    company: "Visionary Creations",
-    image: user5,
-    text: "I am amazed by the level of professionalism and dedication shown by the team. They were able to exceed our expectations and deliver outstanding results.",
-  },
-  {
-    user: "Emily Davis",
-    company: "Synergy Systems",
-    image: user6,
-    text: "The team went above and beyond to ensure our project was a success. Their expertise and dedication are unmatched. I look forward to working with them again in the future.",
-  },
+ user: "John Doe",
+ company: "Stellar Solutions",
+ image: user1,
+ text: "Estoy extremadamente satisfecho con los servicios de NSGA. El equipo fue receptivo, profesional y entregó resultados más allá de mis expectativas.",
+ },
+ {
+ user: "Jane Smith",
+ company: "Blue Horizon Technologies",
+ image: user2,
+ text: "No podría estar más feliz con el resultado de nuestro proyecto. La creatividad y las habilidades de resolución de problemas del equipo fueron fundamentales para dar vida a nuestra visión.",
+ },
+ {
+ user: "David Johnson",
+ company: "Quantum Innovations",
+ image: user3,
+ text: "Trabajar con NSGA fue un placer. Su atención al detalle y compromiso con la excelencia son encomiables. Los recomendaría encarecidamente a cualquiera que busque un servicio de primer nivel.",
+ },
+ {
+ user: "Ronee Brown",
+ company: "Fusion Dynamics",
+ image: user4,
+ text: "Trabajar con el equipo de NSGA fue un cambio de juego para nuestro proyecto. Su atención al detalle y soluciones innovadoras nos ayudaron a alcanzar nuestras metas y objetivos más rápido de lo que pensábamos posible. ¡Estamos agradecidos por su experiencia y profesionalismo!",
+ },
+ {
+ user: "Michael Wilson",
+ company: "Visionary Creations",
+ image: user5,
+ text: "Estoy impresionado por el nivel de profesionalismo y dedicación demostrado por el equipo de NSGA. Fueron capaces de superar nuestras expectativas y entregar resultados excepcionales.",
+ },
+ {
+ user: "Emily Davis",
+ company: "Synergy Systems",
+ image: user6,
+ text: "El equipo de NSGA se esforzó para asegurar que nuestro proyecto fuera un éxito. Su experiencia y dedicación son incomparables. Espero con ansias trabajar con ellos nuevamente en el futuro.",
+ }
 ];
 
 export const features = [
   {
     icon: <BotMessageSquare />,
-    text: "Drag-and-Drop Interface",
+    text: "Optimización de la carga y gestión de datos académicos.",
     description:
-      "Easily design and arrange your VR environments with a user-friendly drag-and-drop interface.",
+      "Facilita la carga de alumnos a las materias adeudadas para coloquios, automatiza la generación de actas de coloquios, complementarios, previos y equivalencias, y simplifica el seguimiento de las diferentes condiciones de las materias.",
   },
   {
     icon: <Fingerprint />,
-    text: "Multi-Platform Compatibility",
+    text: "Automatización de procesos administrativos.",
     description:
-      "Build VR applications that run seamlessly across multiple platforms, including mobile, desktop, and VR headsets.",
+      "Automatiza la generación del Registro Anual de Calificaciones (RAC), y agiliza la gestión de trámites y solicitudes.",
   },
   {
     icon: <ShieldHalf />,
-    text: "Built-in Templates",
+    text: "Centralización de la información académica.",
     description:
-      "Jumpstart your VR projects with a variety of built-in templates for different types of applications and environments.",
+      "Brinda un único espacio donde se puede acceder a toda la información académica de alumnos, profesores y personal administrativo, permitiendo un acceso intuitivo y personalizado a la información.",
   },
   {
     icon: <BatteryCharging />,
-    text: "Real-Time Preview",
+    text: "Gestión de ciclo lectivo.",
     description:
-      "Preview your VR application in real-time as you make changes, allowing for quick iterations and adjustments.",
+      "Permite la gestión del ciclo lectivo, el alta, baja y modificación de Ciclo Lectivo, consulta y carga.",
   },
   {
     icon: <PlugZap />,
-    text: "Collaboration Tools",
+    text: "Gestión de alumnos.",
     description:
-      "Work together with your team in real-time on VR projects, enabling seamless collaboration and idea sharing.",
+      "Permite la gestión de alumnos, el alta, baja y modificación de alumnos, consulta de datos de alumnos, impresión de listados de alumnos, la carga de materias adeudadas a coloquios, seguimiento del progreso académico de cada alumno, generación de informes de avance.",
   },
   {
     icon: <GlobeLock />,
-    text: "Analytics Dashboard",
+    text: "Gestión de planes de estudio.",
     description:
-      "Gain valuable insights into user interactions and behavior within your VR applications with an integrated analytics dashboard.",
+      "Permite la gestión de planes de estudio, el alta, baja y modificación de planes, consulta de datos del plan, y carga del plan de estudio.",
   },
 ];
 
 export const checklistItems = [
   {
-    title: "Code merge made easy",
+    title: "Optimiza la carga y gestión de datos académicos.",
     description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
+      "Con NSGA, podrás cargar y gestionar de manera eficiente los datos de tus alumnos, materias, exámenes, actas, calificaciones y el Registro Anual de Calificaciones (RAC). Además, podrás automatizar los procesos de carga y gestión de datos para ahorrar tiempo y recursos.",
   },
   {
-    title: "Review code without worry",
+    title: "Facilita la revisión y aprobación de la información académica.",
     description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
+      "Con NSGA, podrás revisar y aprobar la información académica de tus alumnos con facilidad y tranquilidad. La aplicación te permitirá detectar y corregir errores antes de la generación de informes, así como también hacer seguimiento de las diferentes condiciones de las materias.",
   },
   {
-    title: "AI Assistance to reduce time",
+    title: "Ofrece un acceso intuitivo y personalizado a la información académica.",
     description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
+      "Con NSGA, podrás centrar toda la información académica de tu institución en un solo lugar, brindando un acceso intuitivo y personalizado a la información para alumnos, docentes y personal administrativo. La aplicación también te permitirá generar informes personalizados de seguimiento del progreso de los alumnos.",
   },
   {
-    title: "Share work in minutes",
+    title: "Agiliza la gestión del ciclo lectivo.",
     description:
-      "Track the performance of your VR apps and gain insights into user behavior.",
+      "Con NSGA, podrás gestionar el ciclo lectivo de manera eficiente, generando altas, bajas y modificaciones del ciclo lectivo, consulta y carga de planes de estudio, y siguiendo de cerca el progreso de tus alumnos.",
   },
 ];
 
 export const pricingOptions = [
   {
-    title: "Free",
+    title: "Gratis",
     price: "$0",
     features: [
       "Private board sharing",
@@ -135,7 +135,7 @@ export const pricingOptions = [
   },
   {
     title: "Pro",
-    price: "$10",
+    price: "u$d10",
     features: [
       "Private board sharing",
       "10 Gb Storage",
@@ -144,7 +144,7 @@ export const pricingOptions = [
     ],
   },
   {
-    title: "Enterprise",
+    title: "Empresas",
     price: "$200",
     features: [
       "Private board sharing",

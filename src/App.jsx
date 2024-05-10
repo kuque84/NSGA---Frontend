@@ -10,6 +10,7 @@ import Footer from './components/Footer'
 import Login from './components/Login'
 import Home from './components/Home'
 import { useUserContext } from "./context/userContext";
+import Alumnos from './components/Alumnos'
 
 
 const App = () => {
@@ -28,13 +29,18 @@ const App = () => {
           </>
         }/>
         <Route path="login" element={
-          <div className="text-xl h-[100vh] flex justify-center items-center bg-cover">
+          <div className="text-xl h-[80vh] flex justify-center items-center bg-cover">
             <Login />
           </div>
         }/>
         <Route path="home" element={
-          <div className="text-xl h-[100vh] flex justify-center items-center bg-cover">
+          <div className="text-xl h-[80vh] flex justify-center items-center bg-cover">
             <Home />
+          </div>
+        }/>
+        <Route path="alumnos" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <Alumnos />
           </div>
         }/>
         <Route 

@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from '../context/userContext';
-import { LogIn } from "lucide-react";
 
 
 const Login = () => {
@@ -15,11 +14,14 @@ const Login = () => {
     const navigate = useNavigate()
 
     const handleLogin = async () => {
+        //console.log(dni,password)
         if(dni && password){
-            const loginIn = await uselogin(dni, password)
-            setUser(localStorage.getItem('user'))
-            setIsAuthenticated(true)
-            if (loginIn) {
+            const {data, Authenticated} = await uselogin(dni, password)
+            //console.log('data: ', data)
+            setUser(data)
+            //console.log('user: ', user)
+            setIsAuthenticated(Authenticated)
+            if (Authenticated) {
                 navigate("/home")
             }
         }
@@ -53,8 +55,11 @@ const Login = () => {
                         name="password" 
                         id="password" 
                         className="block py-0 px-0 w-full text-lg text-blue-800 bg-transparent border-0 border-b-2 border-cyan-500 appearance-none focus:outline-none focus:ring-0 focus:border-blue-800 peer"
-                         placeholder=""
-                         required 
+                        placeholder=""
+                        required 
+                        onKeyDown={(e) => {
+                            e.key === "Enter" && handleLogin();
+                          }}
                     />
                     <label htmlFor="password" className="peer-focus:font-medium absolute text-sm text-cyan-500 duration-300 transform -translate-y-6 scale-75 top-1 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-800 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">Contraseña:</label>
                     <BiKey htmlFor="password" className="absolute top-1 right-0 text-cyan-500 peer-focus:text-blue-800"/>
@@ -68,7 +73,7 @@ const Login = () => {
                 </div>
                 <button 
                     onClick={()=>handleLogin(dni, password)} 
-                    className="w-full p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-cyan-500 to-blue-800 duration-75" 
+                    className='border border-cyan-500 w-full p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-cyan-500 to-blue-800 ease-in duration-300'
                 >
                     Iniciar Sesión
                 </button>

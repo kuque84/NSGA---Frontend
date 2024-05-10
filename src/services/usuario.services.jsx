@@ -14,24 +14,13 @@ export async function loginService(dni, password) {
             throw new Error("Respuesta de la API inválida. Falta token o dni.");
         }
 
-        // Almacena token y dni en localStorage
-        //localStorage.setItem('token', response.data.usuario.token);
-        //localStorage.setItem('dni', response.data.usuario.dni);
-        //console.log("Token:", localStorage.getItem('token'));
+        // Almacena token en localStorage
+        localStorage.setItem('token', response.data.usuario.token);
         data = response.data.usuario;
-        //localStorage.setItem("Usuario:",data)
-
-        localStorage.setItem(
-            'user',
-            JSON.stringify(data)
-        )
-        localStorage.setItem(
-            'isAuthenticated',true)
-
-        console.log("Datos locales almacenados:", localStorage.getItem('user'), localStorage.getItem('isAuthenticated'));
-
+        const Authenticated = true;
+        //console.log("Token almacenado localmente: ", localStorage.getItem('token'));
         // Retorna los datos recibidos
-        return data
+        return {data, Authenticated}
     } catch (error) {
         // Registra el error para depuración (opcional)
         console.error("Error en el servicio de login:", error);
