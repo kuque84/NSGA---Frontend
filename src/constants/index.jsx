@@ -14,7 +14,7 @@ import user5 from "../assets/profile-pictures/user5.jpg";
 import user6 from "../assets/profile-pictures/user6.jpg";
 
 export const navItems = [
-  { label: "Alumnos", href: "alumnos" },
+  { label: "Alumnos", href: "/alumnos" },
   { label: "Previas", href: "#" },
   { label: "Exámenes", href: "#" },
   { label: "Actas y Permisos", href: "#" },

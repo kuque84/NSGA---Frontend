@@ -6,7 +6,7 @@ const Workflow = () => {
   return (
     <div className="mt-20">
         <h2 className="text-3xl sm:text-5xl lg:text-6xl text-center mt-6">Simplifica la gestión{" "}
-        <span className="bg-gradient-to-r from-cyan-500 to-blue-800 text-transparent bg-clip-text">académica con NSGA.</span>
+        <span className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">académica con NSGA.</span>
         </h2>
         <div className="flex flex-wrap justify-center">
             <div className="p-2 w-full lg:w-1/2">
@@ -15,7 +15,7 @@ const Workflow = () => {
             <div className="pt-12 w-full lg:w-1/2">
                 {checklistItems.map((item, index) => (
                     <div key={index} className="flex mb-12">
-                        <div className="text-cyan-500 mx-6 bg-neutral-900 h-10 w-10 p-2 justify-center items-center rounded-full">
+                        <div className="text-primary mx-6 bg-neutral-900 h-10 w-10 p-2 justify-center items-center rounded-full">
                             <CheckCircle2 />
                         </div>
                         <div>
