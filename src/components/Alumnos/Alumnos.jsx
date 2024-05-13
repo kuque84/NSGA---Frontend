@@ -2,7 +2,6 @@ import {Link} from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import settings from '../../Config/index'
-import { useUserContext } from '../../context/userContext'
 import {useNavigate} from 'react-router-dom'
 import { BiSearchAlt } from "react-icons/bi";
 
@@ -16,17 +15,13 @@ const Alumnos = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        loadAlumnos();
-      }, []);
-    
-      useEffect(() => {
-        loadAlumnos();
-      }, [numpage]);
+      loadAlumnos();
+    }, []);
 
       useEffect(() => {
         loadAlumnos();
-      }, [searchQuery]);
-    
+    }, [numpage, searchQuery]);
+
       const nextPage = () => {
         if (numpage < Math.ceil(cantItems/5))
         setNumpage(numpage + 1);
@@ -36,14 +31,10 @@ const Alumnos = () => {
         if (numpage > 1)
         setNumpage(numpage - 1);
       }
-
-      const createAlumno = () => {
-        navigate('/alumnos/crear')
-        console.log('Crear Alumno')
-      }
-
+      
       const loadAlumnos = () => {
-            axios.get(`${API_URL}/alumno/lista/` +  numpage + "/" + searchQuery,
+            //axios.get(`${API_URL}/alumno/lista/` +  numpage + "/" + searchQuery,
+            axios.get(`${API_URL}/alumno/lista/${numpage}/${searchQuery}`, 
             {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem("token")}`
@@ -64,7 +55,7 @@ const Alumnos = () => {
       <div className='w-full h-fit relative my-1 mx-4'>
         <div className="bg-sky-100 border border-secondary rounded-md py-0 px-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
           <button 
-              onClick={() => {createAlumno()}} 
+              onClick={() => navigate('/alumnos/crear')} 
               className='text-xs sm:text-sm lg:text-lg z-10 border border-primary p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300'
           >
               Agregar Alumno
@@ -98,7 +89,7 @@ const Alumnos = () => {
             <ul className="grid">
                 {filteredAlumnos.map((alumno) => (
                     <Link  key={alumno.dni} to={`info/${alumno.dni}`}>
-                <li className=" bg-primary text-secondary bg-opacity-10 hover:bg-secondary hover:text-primary cursor-pointer  p-3 m-2 rounded-md">
+                <li className="text-xs sm:text-sm lg:text-lg bg-primary text-secondary bg-opacity-10 hover:bg-secondary hover:text-primary cursor-pointer  p-3 m-2 rounded-md">
                     {alumno.apellidos}, {alumno.nombres}  - DNI: {alumno.dni}
                 </li></Link>
                 ))}

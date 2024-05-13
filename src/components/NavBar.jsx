@@ -25,7 +25,6 @@ const NavBar = (props) => {
           response => response,
           error => {
             if (error.response && error.response.status === 401) {
-                console.log("Sesión vencida")
               Swal.fire({
                 icon: 'error',
                 title: 'Sesión vencida',
@@ -36,6 +35,9 @@ const NavBar = (props) => {
                   navigate('/login');
                 }
               });
+              localStorage.removeItem('token')
+              console.log('token invalido eliminado')
+              navigate('/')
             }
             return Promise.reject(error);
           }
@@ -51,7 +53,6 @@ const NavBar = (props) => {
         return
       }
       const handleVerifyToken = async () => {
-        
             const {data, Authenticated} = await useVerifyToken(localStorage.getItem('token'))
             //console.log("data: ", data)
             if (Authenticated === true) {
@@ -95,7 +96,7 @@ const NavBar = (props) => {
       }
 
   return (
-    <nav className="sticky top-0 z-50 py-3 my-4 backdrop-blur-lg border-b border-neutral-700/80">
+    <nav className="sticky top-0 z-50 py-3 my-4 backdrop-blur-lg border-b border-secondary/80">
         <div className="container px-4 mx-auto relative text-sm">
             <div className="flex justify-between items-center">
                 <div className="flex items-center flex-shrink-0">
@@ -104,7 +105,7 @@ const NavBar = (props) => {
                 </div>
                 <ul className={`hidden lg:flex ml-14 space-x-12 ${isAuthenticated ? '' : 'invisible pointer-events-none'}`}>
                     {navItems.map((item, index) => (
-                        <li key={index} className='hover:font-bold hover:text-blue-800 duration-300'>
+                        <li key={index} className='font-semibold hover:font-bold text-primary  hover:text-secondary duration-300'>
                             <a href={item.href}>{item.label}</a>
                         </li>
                     ))}

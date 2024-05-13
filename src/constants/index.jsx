@@ -18,7 +18,7 @@ export const navItems = [
   { label: "Previas", href: "#" },
   { label: "Exámenes", href: "#" },
   { label: "Actas y Permisos", href: "#" },
-  { label: "Configuración", href: "#" },
+  { label: "Configuración", href: "/ciclolectivo" },
 ];
 
 export const testimonials = [

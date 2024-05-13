@@ -1,9 +1,11 @@
 import axios from 'axios';
 import { json } from 'react-router-dom';
+import settings from '../Config/index';
 
-const API_URL = 'http://localhost:3000';
 
+//const API_URL = 'http://localhost:3000';
 export async function loginService(dni, password) {
+    const API_URL = settings.API_URL;
     let data={};
     try {
         //console.log("Ingresando al servicio de login");

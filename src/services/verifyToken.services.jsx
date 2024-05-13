@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { json } from 'react-router-dom';
+import settings from '../Config/index';
 
-const API_URL = 'http://localhost:3000';
 
 export async function verifyTokenService(token) {
+    const API_URL = settings.API_URL;
     let data={};
     try {
         //console.log("Token recibido en verifyTokenService: ", token);

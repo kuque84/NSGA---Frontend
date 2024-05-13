@@ -12,6 +12,10 @@ import Home from './components/Home'
 import { useUserContext } from "./context/userContext";
 import Alumnos from './components/Alumnos/Alumnos'
 import AlumnosCrear from './components/Alumnos/AlumnosCrear'
+import AlumnosInfo from './components/Alumnos/AlumnosInfo'
+import CicloLectivo from './components/CicloLectivo/CicloLectivo'
+import CicloLectivoCrear from './components/CicloLectivo/CicloLectivoCrear'
+import CicloLectivoInfo from './components/CicloLectivo/CicloLectivoInfo'
 
 
 const App = () => {
@@ -49,12 +53,34 @@ const App = () => {
             <AlumnosCrear />
           </div>
         }/>
+        <Route path="alumnos/info/:dni" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <AlumnosInfo />
+          </div>
+        }/>
+        <Route path="ciclolectivo" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <CicloLectivo />
+          </div>
+        }/>
+        <Route path="ciclolectivo/crear" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <CicloLectivoCrear />
+          </div>
+        }/>
+        <Route path="ciclolectivo/info/:id_ciclo" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <CicloLectivoInfo />
+          </div>
+        }/>
         <Route 
           path="*" 
           element={<div>404 - Pagina no encontrada</div>}
         />
       </Routes>
-      <Footer />
+      <footer>
+        <Footer />
+      </footer>
     </>
   )
 }

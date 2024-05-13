@@ -31,15 +31,23 @@ const AlumnosCrear = () => {
             'Alumno creado con éxito',
             'success'
           )
-        navigate("/alumnos");
+        navigate(`/alumnos/info/${dni}`);
     })
     .catch((error) => {
-        Swal.fire(
+        if (error.response && error.response.status === 409) {
+          Swal.fire(
+            'No se pudo crear el alumno',
+            `${error.response.data.message}`,
+            'warning'
+          )
+        } else {
+          Swal.fire(
             'Error',
             'Hubo un error al crear el alumno',
             'error'
           )
-    });
+        }
+      });
   };
 
   return (
@@ -58,7 +66,7 @@ const AlumnosCrear = () => {
                         autoComplete="off"
                         name="dni"
                         placeholder="" 
-                        onChange={(e) => setDni(e.target.value)}
+                        onChange={(e) => setDni(e.target.value.toUpperCase())}
                         //se debe completar el campo dni
                         required
                     />
@@ -78,7 +86,7 @@ const AlumnosCrear = () => {
                         autoComplete="off"
                         name="nombres"
                         placeholder="" 
-                        onChange={(e) => setNombres(e.target.value)}
+                        onChange={(e) => setNombres(e.target.value.toUpperCase())}
                         required
                     />
                     <label 
@@ -97,7 +105,7 @@ const AlumnosCrear = () => {
                         autoComplete="off"
                         name="apellidos"
                         placeholder="" 
-                        onChange={(e) => setApellidos(e.target.value)}
+                        onChange={(e) => setApellidos(e.target.value.toUpperCase())}
                         required
                     />
                     <label 
@@ -109,8 +117,14 @@ const AlumnosCrear = () => {
                 </div>
                 <button 
                     type="submit"
-                    className='text-xs sm:text-sm lg:text-lg z-10 border border-primary p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300'
+                    className='ml-3 text-xs sm:text-sm lg:text-lg z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-500 ease-in duration-300'
                     >Agregar Alumno
+                </button>
+                <button 
+                    type="button"
+                    onClick={() => navigate("/alumnos") }
+                    className='ml-3 text-xs sm:text-sm lg:text-lg z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300'
+                    >Volver
                 </button>
             </div>
         </form>
