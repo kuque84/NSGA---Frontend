@@ -5,30 +5,30 @@ import settings from '../../Config/index';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
-const CicloLectivoInfo = () => {
-    const [cicloLectivo, setCicloLectivo] = useState({});
-    const [anio, setAnio] = useState("");
+const RolesInfo = () => {
+    const [Rol, setRol] = useState({});
+    const [rol, setRolp] = useState("");
     const API_URL = settings.API_URL;
     const navigate = useNavigate();
-    const  {id_ciclo} = useParams();
+    const  {id_rol} = useParams();
     const [isDisabled, setIsDisabled] = useState(true);
 
     useEffect(() => {
-        if (id_ciclo) {
-            axios.get(`${API_URL}/ciclolectivo/filtrar/id_ciclo/${id_ciclo}`, {
+        if (id_rol) {
+            axios.get(`${API_URL}/rol/filtrar/id_rol/${id_rol}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem("token")}`
                 }
             })
             .then((response) => {
-                const cicloLectivo = response.data[0];
-                setAnio(cicloLectivo.anio);
+                const Rol = response.data[0];
+                setRolp(Rol.rol);
               })
             .catch((error) => {
-                console.error("Error al obtener el ciclo lectivo:", error);
+                console.error("Error al obtener el rol:", error);
                 Swal.fire(
                     'Error',
-                    'Hubo un error al obtener los datos del ciclo lectivo',
+                    'Hubo un error al obtener los datos del rol',
                     'error'
                   )
             });
@@ -37,15 +37,15 @@ const CicloLectivoInfo = () => {
     , []);
 
     useEffect(() => {
-        setCicloLectivo({
-            anio: anio,
+        setRol({
+            rol: rol,
         })
-    }, [anio]);
+    }, [rol]);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        setCicloLectivo({ anio });
-        axios.put(`${API_URL}/ciclolectivo/actualizar/${id_ciclo}`, cicloLectivo, {
+        setRol({ rol });
+        axios.put(`${API_URL}/rol/actualizar/${id_rol}`, Rol, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem("token")}`
             }
@@ -61,14 +61,14 @@ const CicloLectivoInfo = () => {
             .catch((error) => {
                 if (error.response && error.response.status === 409) {
                   Swal.fire(
-                    'No se pudo editar el ciclo lectivo',
+                    'No se pudo editar el rol',
                     `${error.response.data.message}`,
                     'warning'
                   )
                 } else {
                   Swal.fire(
                     'Error',
-                    'Hubo un error al editar el ciclo lectivo',
+                    'Hubo un error al editar el rol',
                     'error'
                   )
                 }
@@ -91,7 +91,7 @@ const CicloLectivoInfo = () => {
             confirmButtonText: '¡Sí, elimínalo!'
           }).then((result) => {
             if (result.isConfirmed) {
-              axios.delete(`${API_URL}/cicloLectivo/eliminar/${id_ciclo}`, {
+              axios.delete(`${API_URL}/rol/eliminar/${id_rol}`, {
                 headers: {
                   'Authorization': `Bearer ${localStorage.getItem("token")}`
                 }
@@ -99,15 +99,15 @@ const CicloLectivoInfo = () => {
               .then((response) => {
                 Swal.fire(
                     '¡Eliminado!',
-                    'El ciclo lectivo ha sido eliminado.',
+                    'El rol ha sido eliminado.',
                     'success'
                   )
-                navigate("/ciclos-lectivos");
+                navigate("/roles");
               })
               .catch((error) => {
                 Swal.fire(
                     'Error',
-                    'Hubo un error al eliminar el ciclo lectivo',
+                    'Hubo un error al eliminar el rol',
                     'error'
                   )
               });
@@ -119,26 +119,26 @@ const CicloLectivoInfo = () => {
         <div className='w-full h-fit relative my-1 mx-4'>
             <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
                 <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-2xl sm:text-4xl lg:text-5xl text-center tracking-wide py-2">
-                    Datos del Ciclo Lectivo
+                    Datos del Rol
                 </h1>
                 <form onSubmit={handleSubmit}>
                     <div className="relative mt-4 mb-6">
                         <input
-                            id="anio"
+                            id="rol"
                             className="block py-0 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
-                            value={anio}
-                            type="number"
+                            value={rol}
+                            type="text"
                             autoComplete="off"
-                            name="anio"
-                            onChange={(e) => setAnio(e.target.value.toUpperCase())}
+                            name="rol"
+                            onChange={(e) => setNombre(e.target.value.toUpperCase())}
                             required
                             disabled={isDisabled}
                         />
                         <label
-                            htmlFor="anio"
-                            className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${anio ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
+                            htmlFor="rol"
+                            className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${rol ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
                         >
-                            Año:
+                            Rol:
                         </label>
                     </div>
                     <div className='flex justify-between'>
@@ -157,7 +157,7 @@ const CicloLectivoInfo = () => {
                             </button>
                             <button
                                 type="button"
-                                onClick={() => navigate("/ciclolectivo")}
+                                onClick={() => navigate("/roles")}
                                 className='ml-3 text-xs sm:text-sm lg:text-lg z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300'
                                 hidden={!isDisabled}
                             >Volver
@@ -168,7 +168,7 @@ const CicloLectivoInfo = () => {
                             type="button"
                             className='ml-3 text-xs sm:text-sm lg:text-lg z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300'
                             hidden={isDisabled}
-                        >Eliminar Ciclo Lectivo
+                        >Eliminar Rol
                         </button>
                     </div>
                 </form>
@@ -177,4 +177,4 @@ const CicloLectivoInfo = () => {
     )
 }
 
-export default CicloLectivoInfo;
+export default RolesInfo;

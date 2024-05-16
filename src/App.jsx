@@ -16,6 +16,16 @@ import AlumnosInfo from './components/Alumnos/AlumnosInfo'
 import CicloLectivo from './components/CicloLectivo/CicloLectivo'
 import CicloLectivoCrear from './components/CicloLectivo/CicloLectivoCrear'
 import CicloLectivoInfo from './components/CicloLectivo/CicloLectivoInfo'
+import ControlPanel from './components/ControlPanel'
+import UnderConstruction from './components/UnderConstruction'
+import Roles from './components/Roles/Roles'
+import RolesCrear from './components/Roles/RolesCrear'
+import RolesInfo from './components/Roles/RolesInfo'
+import Usuarios from './components/Usuarios/Usuarios'
+import UsuariosCrear from './components/Usuarios/UsuariosCrear'
+import UsuariosInfo from './components/Usuarios/UsuariosInfo'
+
+
 
 
 const App = () => {
@@ -58,6 +68,7 @@ const App = () => {
             <AlumnosInfo />
           </div>
         }/>
+
         <Route path="ciclolectivo" element={
           <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
             <CicloLectivo />
@@ -73,10 +84,51 @@ const App = () => {
             <CicloLectivoInfo />
           </div>
         }/>
+
+        <Route path="roles" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <Roles />
+          </div>
+        }/>
+        <Route path="roles/crear" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <RolesCrear />
+          </div>
+        }/>
+        <Route path="roles/info/:id_rol" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <RolesInfo />
+          </div>
+        }/>
+
+        
+        <Route path="usuarios" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <Usuarios />
+          </div>
+        }/>
+        <Route path="usuarios/crear" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <UsuariosCrear />
+          </div>
+        }/>
+        <Route path="usuarios/info/:id" element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <UsuariosInfo />
+          </div>
+        }/>
+
         <Route 
           path="*" 
-          element={<div>404 - Pagina no encontrada</div>}
+          element={<UnderConstruction />}
         />
+        <Route path='/controlpanel' element={
+          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+            <ControlPanel />
+            <Outlet /> {/* Las rutas hijas de /controlpanel se renderizarán aquí */}
+          </div>
+        }>
+        </Route>
       </Routes>
       <footer>
         <Footer />

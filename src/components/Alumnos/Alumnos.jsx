@@ -61,7 +61,6 @@ const Alumnos = () => {
               Agregar Alumno
           </button>
         </div>
-
         <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
           <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-2xl sm:text-4xl lg:text-5xl text-center tracking-wide py-2">Listado de Alumnos</h1>
           <div className="relative mt-4 mb-6">

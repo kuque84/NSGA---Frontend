@@ -5,21 +5,21 @@ import settings from '../../Config/index';
 import { useNavigate } from 'react-router-dom';
 import { BiSearchAlt } from "react-icons/bi";
 
-const CicloLectivo = () => {
-    const [ciclosLectivos, setCiclosLectivos] = useState([]);
+const Usuarios = () => {
+    const [Usuarios, setUsuarios] = useState([]);
     const [searchQuery, setSearchQuery] = useState("");
-    const [filteredCiclosLectivos, setFilteredCiclosLectivos] = useState([]);
+    const [filteredUsuarios, setFilteredUsuarios] = useState([]);
     const [numpage, setNumpage] = useState(1);
     const [totalItems, setTotalItems] = useState(0);
     const API_URL = settings.API_URL;
     const navigate = useNavigate();
 
     useEffect(() => {
-        loadCiclosLectivos();
+        loadUsuarios();
     }, []);
 
     useEffect(() => {
-        loadCiclosLectivos();
+        loadUsuarios();
     }, [numpage, searchQuery]);
 
     const nextPage = () => {
@@ -34,19 +34,19 @@ const CicloLectivo = () => {
         }
     };
 
-    const loadCiclosLectivos = () => {
-        axios.get(`${API_URL}/ciclolectivo/lista/${numpage}/${searchQuery}`, {
+    const loadUsuarios = () => {
+        axios.get(`${API_URL}/usuario/lista/${numpage}/${searchQuery}`, {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem("token")}`
             }
         })
             .then((response) => {
                 setTotalItems(response.data.count);
-                setCiclosLectivos(response.data.rows);
-                setFilteredCiclosLectivos(response.data.rows);
+                setUsuarios(response.data.rows);
+                setFilteredUsuarios(response.data.rows);
             })
             .catch((error) => {
-                console.error("Error al obtener la lista de ciclos lectivos:", error);
+                console.error("Error al obtener la lista de Usuarios:", error);
             });
     };
 
@@ -54,19 +54,19 @@ const CicloLectivo = () => {
         <div className='w-full h-fit relative my-1 mx-4'>
             <div className="bg-sky-100 border border-secondary rounded-md py-0 px-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
                 <button
-                    onClick={() => navigate('/ciclolectivo/crear')}
+                    onClick={() => navigate('/usuarios/crear')}
                     className='text-xs sm:text-sm lg:text-lg z-10 border border-primary p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300'>
-                    Agregar Ciclo Lectivo
+                    Agregar Usuario
                 </button>
             </div>
             <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
-                <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-2xl sm:text-4xl lg:text-5xl text-center tracking-wide py-2">Listado de Ciclos Lectivos</h1>
+                <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-2xl sm:text-4xl lg:text-5xl text-center tracking-wide py-2">Listado de Usuarios</h1>
                 <div className="relative mt-4 mb-6">
                     <input
                         id="searchQuery"
                         className="block py-0 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
                         value={searchQuery}
-                        onKeyDown={() => {loadCiclosLectivos(), setNumpage(1)}}
+                        onKeyDown={() => {loadUsuarios(), setNumpage(1)}}
                         onChange={(e) => {setSearchQuery(e.target.value)}}
                         type="text"
                         autoComplete="off"
@@ -77,16 +77,16 @@ const CicloLectivo = () => {
                         htmlFor="searchQuery"
                         className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${searchQuery ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholdershown:scale-100 peer-placeholder-shown:translate-y-0`}
                     >
-                        Buscar Ciclo Lectivo:
+                        Buscar Usuario:
                     </label>
                     <BiSearchAlt htmlFor="searchQuery" className="absolute top-1 right-0 text-primary peer-focus:text-secondary" />
                 </div>
                 <div>
                     <ul className="grid">
-                        {filteredCiclosLectivos.map((cicloLectivo) => (
-                            <Link key={cicloLectivo.id_ciclo} to={`info/${cicloLectivo.id_ciclo}`}>
+                        {filteredUsuarios.map((Usuarios) => (
+                            <Link key={Usuarios.id} to={`info/${Usuarios.id}`}>
                                 <li className="text-xs sm:text-sm lg:text-lg bg-primary text-secondary bg-opacity-10 hover:bg-secondary hover:text-primary cursor-pointer p-3 m-2 rounded-md">
-                                    Ciclo Lectivo: {cicloLectivo.anio}
+                                    Usuario: {Usuarios.nombre} - {Usuarios.id_rol}
                                 </li>
                             </Link>
                         ))}
@@ -115,4 +115,4 @@ const CicloLectivo = () => {
     );
 };
 
-export default CicloLectivo;
+export default Usuarios;

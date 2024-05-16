@@ -15,10 +15,10 @@ import user6 from "../assets/profile-pictures/user6.jpg";
 
 export const navItems = [
   { label: "Alumnos", href: "/alumnos" },
-  { label: "Previas", href: "#" },
-  { label: "Exámenes", href: "#" },
-  { label: "Actas y Permisos", href: "#" },
-  { label: "Configuración", href: "/ciclolectivo" },
+  { label: "Previas", href: "/previas" },
+  { label: "Exámenes", href: "/examenes" },
+  { label: "Actas y Permisos", href: "/actas" },
+  { label: "Panel de Control", href: "/controlpanel" },
 ];
 
 export const testimonials = [
