@@ -8,16 +8,43 @@ import { useNavigate } from 'react-router-dom';
 const UsuariosInfo = () => {
     const [usuario, setUsuario] = useState({
     });
-    const [nombre, setNombre] = useState("");
+    const [nombres, setNombres] = useState("");
+    const [apellidos, setApellidos] = useState("");
     const [email, setEmail] = useState("");
     const [dni, setDni] = useState("");
-    const [password, setPassword] = useState(undefined);
+    const [password, setPassword] = useState("");
+    const [dummyState, setDummyState] = useState(false); // dummy state to force a re-render
     const [id_rol, setId_rol] = useState("");
     const API_URL = settings.API_URL;
     const [roles, setRoles] = useState([]);
     const navigate = useNavigate();
     const [isDisabled, setIsDisabled] = useState(true);
     const { id: id } = useParams();
+
+    const fetchUsuario = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/usuario/filtrar/id/${id}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem("token")}`
+                }
+            });
+            const usuario = response.data[0];
+            console.table(usuario);
+            setNombres(usuario.nombres);
+            setApellidos(usuario.apellidos);
+            setEmail(usuario.email);
+            setDni(usuario.dni);
+            setPassword(usuario.password);
+            setId_rol(usuario.id_rol);  
+        } catch (err) {
+            console.error("Error al obtener el usuario:", err);
+            Swal.fire(
+                'Error',
+                'Hubo un error al obtener los datos del usuario',
+                'error'
+                )
+        }
+    };
 
     useEffect(() => {
         const fetchRoles = async () => {
@@ -37,41 +64,20 @@ const UsuariosInfo = () => {
 
     useEffect(() => {
         if (id) {
-            axios.get(`${API_URL}/usuario/filtrar/id/${id}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
-                }
-            })
-            .then((response) => {
-                const usuario = response.data[0];
-                console.table(usuario);
-                setNombre(usuario.nombre);
-                setEmail(usuario.email);
-                setDni(usuario.dni);
-                setPassword(usuario.password);
-                setId_rol(usuario.id_rol);
-              })
-            .catch((error) => {
-                console.error("Error al obtener el usuario:", error);
-                Swal.fire(
-                    'Error',
-                    'Hubo un error al obtener los datos del usuario',
-                    'error'
-                  )
-            });
+            fetchUsuario();
         }
-    }
-    , []);
+    }, [id]);
 
     useEffect(() => {
         setUsuario({
-            nombre: nombre,
+            nombres: nombres,
+            apellidos: apellidos,
             //password: password,
             dni: dni,
             email: email,
             id_rol: id_rol
         })
-    }, [dni, email, nombre, id_rol]);
+    }, [dni, email, nombres, apellidos, id_rol]);
 
     useEffect(() => {
         setUsuario({
@@ -115,6 +121,9 @@ const UsuariosInfo = () => {
     const handleEdit = () => {
         // si isDisabled es true, se cambia a false, y viceversa
         setIsDisabled(!isDisabled);
+        if (!isDisabled) {
+            fetchUsuario()
+        }
     }
 
     const handleDelete = () => {
@@ -152,6 +161,13 @@ const UsuariosInfo = () => {
           })
     }
 
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        // Cambia el estado ficticio para forzar la actualización del componente
+        setDummyState(!dummyState);
+      };
+
+
     return (
         <div className="relative justify-start w-full max-w-7xl h-fit my-1 mx-4">
             <form onSubmit={handleSubmit}>
@@ -162,21 +178,42 @@ const UsuariosInfo = () => {
                     <div className="relative gap-4 mt-4">
                         <div className="relative mt-4 mb-6">
                             <input
-                                id="nombre"
+                                id="nombres"
                                 className="block py-0 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
-                                value={nombre}
+                                value={nombres}
                                 type="text"
                                 autoComplete="off"
-                                name="nombre"
-                                onChange={(e) => setNombre(e.target.value.toUpperCase())}
+                                name="nombres"
+                                onChange={(e) => setNombres(e.target.value.toUpperCase())}
                                 required
                                 disabled={isDisabled}
                             />
                             <label
-                                htmlFor="nombre"
-                                className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${nombre ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
+                                htmlFor="nombres"
+                                className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${nombres ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
                             >
-                                Nombre:
+                                Nombres:
+                            </label>
+                        </div>
+                    </div>
+                    <div className="relative gap-4 mt-4">
+                        <div className="relative mt-4 mb-6">
+                            <input
+                                id="apellidos"
+                                className="block py-0 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                                value={apellidos}
+                                type="text"
+                                autoComplete="off"
+                                name="apellidos"
+                                onChange={(e) => setApellidos(e.target.value.toUpperCase())}
+                                required
+                                disabled={isDisabled}
+                            />
+                            <label
+                                htmlFor="apellidos"
+                                className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${apellidos ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
+                            >
+                                apellidos:
                             </label>
                         </div>
                     </div>
@@ -189,7 +226,7 @@ const UsuariosInfo = () => {
                                 type="text"
                                 autoComplete="off"
                                 name="password"
-                                onChange={(e) => setPassword(e.target.value.toUpperCase())}
+                                onChange={handlePasswordChange}
                                 required
                                 disabled={isDisabled}
                             />
@@ -231,7 +268,7 @@ const UsuariosInfo = () => {
                                 type="email"
                                 autoComplete="off"
                                 name="email"
-                                onChange={(e) => setEmail(e.target.value.toUpperCase())}
+                                onChange={(e) => setEmail()}
                                 required
                                 disabled={isDisabled}
                             />

@@ -13,25 +13,30 @@ const RolesInfo = () => {
     const  {id_rol} = useParams();
     const [isDisabled, setIsDisabled] = useState(true);
 
+    const load = ()=>{
+        axios.get(`${API_URL}/rol/filtrar/id_rol/${id_rol}`, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem("token")}`
+            }
+        })
+        .then((response) => {
+            const Rol = response.data[0];
+            setRolp(Rol.rol);
+          
+        })
+        .catch((error) => {
+            console.error("Error al obtener el rol:", error);
+            Swal.fire(
+                'Error',
+                'Hubo un error al obtener los datos del rol',
+                'error'
+              )
+        });
+    }
+    
     useEffect(() => {
         if (id_rol) {
-            axios.get(`${API_URL}/rol/filtrar/id_rol/${id_rol}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem("token")}`
-                }
-            })
-            .then((response) => {
-                const Rol = response.data[0];
-                setRolp(Rol.rol);
-              })
-            .catch((error) => {
-                console.error("Error al obtener el rol:", error);
-                Swal.fire(
-                    'Error',
-                    'Hubo un error al obtener los datos del rol',
-                    'error'
-                  )
-            });
+            load()
         }
     }
     , []);
@@ -78,6 +83,9 @@ const RolesInfo = () => {
     const handleEdit = () => {
         // si isDisabled es true, se cambia a false, y viceversa
         setIsDisabled(!isDisabled);
+        if (!isDisabled) {
+            load();
+        }
     }
 
     const handleDelete = () => {
@@ -130,7 +138,7 @@ const RolesInfo = () => {
                             type="text"
                             autoComplete="off"
                             name="rol"
-                            onChange={(e) => setNombre(e.target.value.toUpperCase())}
+                            onChange={(e) => setRolp(e.target.value.toUpperCase())}
                             required
                             disabled={isDisabled}
                         />

@@ -6,10 +6,12 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const UsuariosCrear = () => {
-    const [nombre, setNombre] = useState("");
+    const [nombres, setNombres] = useState("");
+    const [apellidos, setApellidos] = useState("");
     const [email, setEmail] = useState("");
     const [dni, setDni] = useState("");
     const [password, setPassword] = useState(undefined);
+    const [dummyState, setDummyState] = useState(false);
     const [id_rol, setId_rol] = useState(undefined);
     const API_URL = settings.API_URL;
     const [roles, setRoles] = useState([]);
@@ -37,11 +39,12 @@ const UsuariosCrear = () => {
         event.preventDefault();
 
         const Usuario = {
-            nombre,
+            nombres,
+            apellidos,
             email,
             dni,
             password,
-            id_rol
+            id_rol  
         };
 
         axios.post(`${API_URL}/usuario/nuevo`, Usuario, {
@@ -67,6 +70,12 @@ const UsuariosCrear = () => {
             });
     };
 
+    const handlePasswordChange = (e) => {
+        setPassword(e.target.value);
+        // Cambia el estado ficticio para forzar la actualización del componente
+        setDummyState(!dummyState);
+      };
+
     return (
         <div className="relative justify-start w-full max-w-7xl h-fit my-1 mx-4">
             <form onSubmit={handleSubmit}>
@@ -77,20 +86,40 @@ const UsuariosCrear = () => {
                     <div className="relative gap-4 mt-4">
                         <div className="relative mt-4 mb-6">
                             <input
-                                id="nombre"
+                                id="nombres"
                                 className="block py-0 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
-                                value={nombre}
+                                value={nombres}
                                 type="text"
                                 autoComplete="off"
-                                name="nombre"
-                                onChange={(e) => setNombre(e.target.value.toUpperCase())}
+                                name="nombres"
+                                onChange={(e) => setNombres(e.target.value.toUpperCase())}
                                 required
                             />
                             <label
-                                htmlFor="nombre"
-                                className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${nombre ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
+                                htmlFor="nombres"
+                                className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${nombres ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
                             >
-                                Nombre:
+                                Nombres:
+                            </label>
+                        </div>
+                    </div>
+                    <div className="relative gap-4 mt-4">
+                        <div className="relative mt-4 mb-6">
+                            <input
+                                id="apellidos"
+                                className="block py-0 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                                value={apellidos}
+                                type="text"
+                                autoComplete="off"
+                                name="apellidos"
+                                onChange={(e) => setApellidos(e.target.value.toUpperCase())}
+                                required
+                            />
+                            <label
+                                htmlFor="apellidos"
+                                className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${apellidos ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
+                            >
+                                Apellidos:
                             </label>
                         </div>
                     </div>
@@ -103,7 +132,7 @@ const UsuariosCrear = () => {
                                 type="text"
                                 autoComplete="off"
                                 name="password"
-                                onChange={(e) => setPassword(e.target.value.toUpperCase())}
+                                onChange={handlePasswordChange}
                                 required
                             />
                             <label
@@ -143,7 +172,7 @@ const UsuariosCrear = () => {
                                 type="email"
                                 autoComplete="off"
                                 name="email"
-                                onChange={(e) => setEmail(e.target.value.toUpperCase())}
+                                onChange={(e) => setEmail()}
                                 required
                             />
                             <label
