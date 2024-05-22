@@ -31,24 +31,75 @@ const AlumnosInfo = () => {
   const [condicion, setCondicion] = useState([]);
   const [previa, setPrevia] = useState([]);
   const [id_previa, setid_previa] = useState(undefined);
+  const [dummyState, setDummyState] = useState(false); // dummy state to force a re-render
 
-  const load =() => {
+  const [planDefaultLabel, setPlanDefaultLabel] =
+    useState("Selecciona un Plan");
+  const [cursoDefaultLabel, setCursoDefaultLabel] = useState(
+    "Selecciona un Curso"
+  );
+  const [materiaDefaultLabel, setMateriaDefaultLabel] = useState(
+    "Selecciona una Materia"
+  );
+  const [condicionDefaultLabel, setCondicionDefaultLabel] = useState(
+    "Selecciona una Condición"
+  );
+  const [cicloDefaultLabel, setCicloDefaultLabel] = useState(
+    "Selecciona un Ciclo Lectivo"
+  );
+
+  const resetDefaultLabels = () => {
+    setPlanDefaultLabel("Selecciona un Plan");
+    setCursoDefaultLabel("Selecciona un Curso");
+    setMateriaDefaultLabel("Selecciona una Materia");
+    setCondicionDefaultLabel("Selecciona una Condición");
+    setCicloDefaultLabel("Selecciona un Ciclo Lectivo");
+  };
+
+  const load = () => {
+    console.log("load");
     fetchAlumno();
     fetchCicloLectivos();
     fetchPlan();
     fetchCurso();
     fetchMateria();
     fetchCondicion();
-  }
+    fetchPrevias();
+    resetDefaultLabels();
+  };
+
+  useEffect(() => {
+    console.log("useEffect por carga de load");
+    load();
+  }, [
+    dniParam,
+    id_plan,
+    id_curso,
+    id_materia,
+    id_condicion,
+    isDisabledPrevias,
+    dummyState,
+  ]);
+
+  useEffect(() => {
+    setAlumno({
+      dni: dni.toUpperCase(),
+      nombres: nombres.toUpperCase(),
+      apellidos: apellidos.toUpperCase(),
+    });
+  }, [dni, nombres, apellidos]);
 
   const fetchAlumno = async () => {
     if (!dniParam) return;
     try {
-      const response = await axios.get(`${API_URL}/alumno/filtrar/dni/${dniParam}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const response = await axios.get(
+        `${API_URL}/alumno/filtrar/dni/${dniParam}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
       const alumno = response.data[0];
       setDni(alumno.dni);
       setNombres(alumno.nombres);
@@ -90,7 +141,7 @@ const AlumnosInfo = () => {
       console.error("Error al obtener los planes:", err);
     }
   };
-  
+
   const fetchCurso = async () => {
     try {
       const response = await axios.get(
@@ -109,7 +160,6 @@ const AlumnosInfo = () => {
     }
   };
 
-  
   const fetchMateria = async () => {
     try {
       const response = await axios.get(
@@ -127,7 +177,7 @@ const AlumnosInfo = () => {
       console.error("Error al obtener las materias:", err);
     }
   };
-  
+
   const fetchCondicion = async () => {
     try {
       const response = await axios.get(`${API_URL}/condicion/lista`, {
@@ -143,14 +193,23 @@ const AlumnosInfo = () => {
     }
   };
 
-  useEffect(() => {
-    setAlumno({
-      dni: dni.toUpperCase(),
-      nombres: nombres.toUpperCase(),
-      apellidos: apellidos.toUpperCase(),
-
-    });
-  }, [dni, nombres, apellidos]);
+  const fetchPrevias = async () => {
+    try {
+      if (!dni) return;
+      const response = await axios.get(
+        `${API_URL}/previa/filtrar/dni_alumno/${dni}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      // console.table(response.data);
+      setPrevia(response.data);
+    } catch (err) {
+      console.error("Error al obtener las previas:", err);
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -187,6 +246,15 @@ const AlumnosInfo = () => {
     setIsDisabled(!isDisabled);
   };
 
+  const handleAgregarPrevia = () => {
+    setIsDisabledPrevias(!isDisabledPrevias);
+  };
+
+  const handleEditPrevia = (id_previa) => {
+    console.log("Editar previa", id_previa);
+  };
+
+
   const handleDelete = () => {
     Swal.fire({
       title: "¿Estás seguro?",
@@ -215,10 +283,6 @@ const AlumnosInfo = () => {
     });
   };
 
-  const handleAgregarPrevia = () => {
-    setIsDisabledPrevias(!isDisabledPrevias);
-  };
-
   const handleGuardarPrevia = (event) => {
     event.preventDefault();
     const dni_alumno = dni;
@@ -227,7 +291,7 @@ const AlumnosInfo = () => {
       id_condicion,
       id_materia,
       id_curso,
-      id_ciclo
+      id_ciclo,
     };
     axios
       .post(`${API_URL}/previa/nuevo`, Previa, {
@@ -241,7 +305,9 @@ const AlumnosInfo = () => {
           "Datos almacenados con éxito",
           "success"
         );
+        resetPreviaFields();
         handleAgregarPrevia();
+        setDummyState(!dummyState);
       })
       .catch((error) => {
         if (error.response && error.response.status === 409) {
@@ -256,33 +322,12 @@ const AlumnosInfo = () => {
       });
   };
 
-  useEffect(() => {
-    load();
-  }, [dniParam, id_plan, id_curso, id_materia, id_condicion, isDisabledPrevias]);
-
-  useEffect(() => {
-    const fetchPrevias = async () => {
-      try {
-        if (!dni) return;
-        const response = await axios.get(
-          `${API_URL}/previa/filtrar/dni_alumno/${dni}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-        console.table(response.data);
-        setPrevia(response.data);
-      } catch (err) {
-        console.error("Error al obtener las previas:", err);
-      }
-    };
-    fetchPrevias();
-  }, [dni, isDisabledPrevias]);
-
-  const handleEditPrevia = (id_previa) => {
-    console.log("Editar previa", id_previa);
+  const resetPreviaFields = () => {
+    setid_plan(undefined);
+    setid_curso(undefined);
+    setid_materia(undefined);
+    setid_condicion(undefined);
+    setid_ciclo(undefined);
   };
 
   const handleDeletePrevia = (previa) => {
@@ -305,7 +350,10 @@ const AlumnosInfo = () => {
           })
           .then((response) => {
             Swal.fire("¡Eliminado!", "La previa ha sido eliminada.", "success");
-            setPrevia(previas => previas.filter(previa => previa.id_previa !== id_previa));
+            setPrevia((previas) =>
+              previas.filter((previa) => previa.id_previa !== id_previa)
+            );
+            setDummyState(!dummyState);
           })
           .catch((error) => {
             Swal.fire("Error", "Hubo un error al eliminar la previa", "error");
@@ -438,6 +486,7 @@ const AlumnosInfo = () => {
             <div className="relative mt-4 mb-6">
               <select
                 onChange={(e) => setid_plan(e.target.value)}
+                value={id_plan || ""}
                 className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona un Plan</option>
@@ -452,6 +501,7 @@ const AlumnosInfo = () => {
 
               <select
                 onChange={(e) => setid_curso(e.target.value)}
+                value={id_curso || ""}
                 className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona un Curso</option>
@@ -464,6 +514,7 @@ const AlumnosInfo = () => {
 
               <select
                 onChange={(e) => setid_materia(e.target.value)}
+                value={id_materia || ""}
                 className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona una Materia</option>
@@ -476,6 +527,7 @@ const AlumnosInfo = () => {
 
               <select
                 onChange={(e) => setid_condicion(e.target.value)}
+                value={id_condicion || ""}
                 className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona una Condición</option>
@@ -491,6 +543,7 @@ const AlumnosInfo = () => {
 
               <select
                 onChange={(e) => setid_ciclo(e.target.value)}
+                value={id_ciclo || ""}
                 className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona un Ciclo Lectivo</option>
@@ -533,11 +586,11 @@ const AlumnosInfo = () => {
                         <div className="flex justify-center">
                           <CiEdit
                             className="text-2xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
-                            onClick={()=>handleEditPrevia()}
+                            onClick={() => handleEditPrevia(previa)}
                           />
                           <CiTrash
                             className="text-2xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
-                            onClick={()=>handleDeletePrevia(previa)}
+                            onClick={() => handleDeletePrevia(previa)}
                           />
                         </div>
                       </td>
