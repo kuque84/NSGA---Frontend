@@ -5,7 +5,6 @@ import settings from "../../Config/index";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { CiEdit, CiFileOn, CiTrash  } from "react-icons/ci";
-import Previas from "./Previas"
 
 const AlumnosInfo = () => {
   const [alumno, setAlumno] = useState({});
