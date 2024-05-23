@@ -15,7 +15,7 @@ const Landing = () => {
         El Nuevo Sistema de Gestión Académica (NSGA) es una propuesta para desarrollar una aplicación web diseñada para optimizar y mejorar la gestión académica del IPEM N° 168 "Diego de Rojas" en Villa General Belgrano, Córdoba, Argentina. Esta aplicación se centra en la carga y gestión de datos, la automatización de procesos administrativos y la centralización de la información académica, con el objetivo de mejorar la eficiencia y facilitar el acceso a la información para alumnos, profesores y personal administrativo.
         </p>
         <div className="flex justify-center my-10">
-            <Link to="#" className='border border-primary w-full p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300' >
+            <Link to="https://docs.google.com/document/d/1-CBIdAy4X0OYA-yz8gbjNe_sz9Wc1IDKexgYSSoZ_SU/edit?usp=drive_link" className='border border-primary w-full p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300' >
                 Documentación
             </Link>
         </div>

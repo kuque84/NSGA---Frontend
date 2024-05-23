@@ -4,7 +4,7 @@ import axios from "axios";
 import settings from "../../Config/index";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { CiEdit, CiFileOn, CiTrash  } from "react-icons/ci";
+import { CiEdit, CiFileOn, CiTrash } from "react-icons/ci";
 
 const AlumnosInfo = () => {
   const [alumno, setAlumno] = useState({});
@@ -33,6 +33,11 @@ const AlumnosInfo = () => {
   const [id_previa, setid_previa] = useState(undefined);
   const [dummyState, setDummyState] = useState(false); // dummy state to force a re-render
 
+  const [turnoExamen, setTurnoExamen] = useState([]);
+  const [id_turno, setid_turno] = useState(undefined);
+  
+  const [id_cicloEnCurso, setid_cicloEnCurso] = useState(undefined);
+
   const [planDefaultLabel, setPlanDefaultLabel] =
     useState("Selecciona un Plan");
   const [cursoDefaultLabel, setCursoDefaultLabel] = useState(
@@ -57,7 +62,7 @@ const AlumnosInfo = () => {
   };
 
   const load = () => {
-    console.log("load");
+    //console.log("load");
     fetchAlumno();
     fetchCicloLectivos();
     fetchPlan();
@@ -66,10 +71,11 @@ const AlumnosInfo = () => {
     fetchCondicion();
     fetchPrevias();
     resetDefaultLabels();
+
   };
 
   useEffect(() => {
-    console.log("useEffect por carga de load");
+    //console.log("useEffect por carga de load");
     load();
   }, [
     id_alumno,
@@ -213,6 +219,25 @@ const AlumnosInfo = () => {
     }
   };
 
+  const fetchTurnoExamen = async () => {
+    console.log("fetchTurnoExamen");
+    try {
+      if (!id_cicloEnCurso) return;
+      const response = await axios.get(
+        `${API_URL}/turnoexamen/filtrar/id_ciclo/${id_cicloEnCurso}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setTurnoExamen(response.data);
+      console.table(response.data);
+    } catch (err) {
+      console.error("Error al obtener la condicion:", err);
+    }
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setAlumno(dni, nombres, apellidos);
@@ -299,7 +324,7 @@ const AlumnosInfo = () => {
       id_materia,
       id_curso,
       id_ciclo,
-      id_plan
+      id_plan,
     };
 
     const url = id_previa
@@ -381,10 +406,62 @@ const AlumnosInfo = () => {
     });
   };
 
-  const handleInscripcion = (previa) => {
-    console.log("Inscripción", previa);
-    //navigate(`/inscripcion/${previa.id_previa}`);
+  const handleInscripcion = async (previa) => {
+    const selectCicloLectivo = cicloLectivo
+      .sort((a, b) => b.anio - a.anio)
+      .reduce((options, ciclo) => {
+        options['Z' + ciclo.id_ciclo] = ciclo.anio;
+        return options;
+      }, {});
+  
+    const { value: cicloSeleccionado } = await Swal.fire({
+      title: "Selecciona el Ciclo Lectivo de la Instancia de Inscripción",
+      input: "select",
+      inputOptions: selectCicloLectivo,
+      inputPlaceholder: "Selecciona el ciclo lectivo",
+      showCancelButton: true,
+      inputValidator: (value) => {
+        return new Promise((resolve) => {
+          if (value) {
+            setid_cicloEnCurso(value.slice(1));
+            fetchTurnoExamen(value.slice(1));
+            console.log("Ciclo seleccionado", value.slice(1));
+            resolve();
+          } else {
+            resolve("Necesitas seleccionar un año.");
+          }
+        });
+      }
+    });
+  
+    if (cicloSeleccionado) {
+      const selectTurnoExamen = turnoExamen
+        .reduce((options, turno) => {
+          options[turno.id_turno] = turno.nombre;
+          return options;
+        }, {});
+  
+      const { value: turnoSeleccionado } = await Swal.fire({
+        title: "Selecciona el Turno de la Instancia de Inscripción",
+        input: "select",
+        inputOptions: selectTurnoExamen,
+        inputPlaceholder: "Selecciona el turno de examen",
+        showCancelButton: true,
+        inputValidator: (value) => {
+          return new Promise((resolve) => {
+            if (value) {
+              setid_cicloEnCurso(value.slice(1));
+              console.log("Ciclo seleccionado", value.slice(1));
+              resolve();
+            } else {
+              resolve("Necesitas seleccionar un año.");
+            }
+          });
+        }
+      });
+    }
   }
+
 
   return (
     <div className="w-full h-fit relative my-1 mx-4">
@@ -590,19 +667,35 @@ const AlumnosInfo = () => {
               <table className="min-w-full py-1 px-0 text-sm text-secondary bg-transparent border-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer">
                 <thead>
                   <tr>
-                    <th className="text-center border-2 border-primary">Curso</th>
-                    <th className="text-center border-2 border-primary">Materia</th>
-                    <th className="text-center border-2 border-primary">Condición</th>
-                    <th className="text-center border-2 border-primary">Ciclo Lectivo</th>
-                    <th className="text-center border-2 border-primary">Acciones</th>
+                    <th className="text-center border-2 border-primary">
+                      Curso
+                    </th>
+                    <th className="text-center border-2 border-primary">
+                      Materia
+                    </th>
+                    <th className="text-center border-2 border-primary">
+                      Condición
+                    </th>
+                    <th className="text-center border-2 border-primary">
+                      Ciclo Lectivo
+                    </th>
+                    <th className="text-center border-2 border-primary">
+                      Acciones
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {previa.map((previa) => (
                     <tr key={previa.id_previa}>
-                      <td className="text-center border-dotted border-2 border-primary">{previa.Curso.nombre}</td>
-                      <td className="text-center border-dotted border-2 border-primary">{previa.Materia.nombre}</td>
-                      <td className="text-center border-dotted border-2 border-primary">{previa.Condicion.nombre}</td>
+                      <td className="text-center border-dotted border-2 border-primary">
+                        {previa.Curso.nombre}
+                      </td>
+                      <td className="text-center border-dotted border-2 border-primary">
+                        {previa.Materia.nombre}
+                      </td>
+                      <td className="text-center border-dotted border-2 border-primary">
+                        {previa.Condicion.nombre}
+                      </td>
                       <td className="text-center border-dotted border-2 border-primary">
                         {previa.CicloLectivo.anio}
                       </td>
@@ -616,7 +709,7 @@ const AlumnosInfo = () => {
                             className="text-2xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
                             onClick={() => handleDeletePrevia(previa)}
                           />
-                           <CiFileOn 
+                          <CiFileOn
                             className="text-2xl mx-3 hover:text-success hover:cursor-pointer hover:scale-125 ease-in duration-300"
                             onClick={() => handleInscripcion(previa)}
                           />
