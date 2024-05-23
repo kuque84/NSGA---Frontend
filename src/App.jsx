@@ -115,6 +115,8 @@ const App = () => {
         <Route path="usuarios/info/:id" element={
           <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
             <UsuariosInfo />
+            <Outlet /> {/*Aquí renderizar Previas.jsx */}
+            
           </div>
         }/>
 

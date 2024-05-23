@@ -4,11 +4,12 @@ import axios from "axios";
 import settings from "../../Config/index";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import { CiEdit } from "react-icons/ci";
-import { CiTrash } from "react-icons/ci";
+import { CiEdit, CiFileOn, CiTrash  } from "react-icons/ci";
+import Previas from "./Previas"
 
 const AlumnosInfo = () => {
   const [alumno, setAlumno] = useState({});
+  const [id_alumno, setId_alumno] = useState("");
   const [dni, setDni] = useState("");
   const [nombres, setNombres] = useState("");
   const [apellidos, setApellidos] = useState("");
@@ -72,6 +73,7 @@ const AlumnosInfo = () => {
     console.log("useEffect por carga de load");
     load();
   }, [
+    id_alumno,
     dniParam,
     id_plan,
     id_curso,
@@ -101,6 +103,7 @@ const AlumnosInfo = () => {
         }
       );
       const alumno = response.data[0];
+      setId_alumno(alumno.id_alumno);
       setDni(alumno.dni);
       setNombres(alumno.nombres);
       setApellidos(alumno.apellidos);
@@ -195,9 +198,9 @@ const AlumnosInfo = () => {
 
   const fetchPrevias = async () => {
     try {
-      if (!dni) return;
+      if (!id_alumno) return;
       const response = await axios.get(
-        `${API_URL}/previa/filtrar/dni_alumno/${dni}`,
+        `${API_URL}/previa/filtrar/id_alumno/${id_alumno}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -250,10 +253,16 @@ const AlumnosInfo = () => {
     setIsDisabledPrevias(!isDisabledPrevias);
   };
 
-  const handleEditPrevia = (id_previa) => {
-    console.log("Editar previa", id_previa);
+  const handleEditPrevia = (previa) => {
+    console.log("Editar previa", previa.id_previa);
+    setid_previa(previa.id_previa);
+    setid_plan(previa.id_plan);
+    setid_curso(previa.id_curso);
+    setid_materia(previa.id_materia);
+    setid_condicion(previa.id_condicion);
+    setid_ciclo(previa.id_ciclo);
+    setIsDisabledPrevias(!isDisabledPrevias);
   };
-
 
   const handleDelete = () => {
     Swal.fire({
@@ -285,20 +294,25 @@ const AlumnosInfo = () => {
 
   const handleGuardarPrevia = (event) => {
     event.preventDefault();
-    const dni_alumno = dni;
     const Previa = {
-      dni_alumno,
+      id_alumno,
       id_condicion,
       id_materia,
       id_curso,
       id_ciclo,
+      id_plan
     };
-    axios
-      .post(`${API_URL}/previa/nuevo`, Previa, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+
+    const url = id_previa
+      ? `${API_URL}/previa/actualizar/${id_previa}`
+      : `${API_URL}/previa/nuevo`;
+    const method = id_previa ? "put" : "post";
+
+    axios[method](url, Previa, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((response) => {
         Swal.fire(
           "Datos actualizados",
@@ -310,14 +324,20 @@ const AlumnosInfo = () => {
         setDummyState(!dummyState);
       })
       .catch((error) => {
-        if (error.response && error.response.status === 409) {
+        if (error.response && error.response.status === 400) {
           Swal.fire(
-            "No se pudo crear la previa",
+            "No se pudo guardar la previa",
             `${error.response.data.message}`,
-            "warning"
+            "info"
+          );
+        } else if (error.response && error.response.status === 409) {
+          Swal.fire(
+            "No se pudo guardar la previa",
+            `${error.response.data.message}`,
+            "error"
           );
         } else {
-          Swal.fire("Error", "Hubo un error al crear la previa", "error");
+          Swal.fire("Error", "Hubo un error al guardar la previa", "error");
         }
       });
   };
@@ -361,6 +381,11 @@ const AlumnosInfo = () => {
       }
     });
   };
+
+  const handleInscripcion = (previa) => {
+    console.log("Inscripción", previa);
+    //navigate(`/inscripcion/${previa.id_previa}`);
+  }
 
   return (
     <div className="w-full h-fit relative my-1 mx-4">
@@ -563,26 +588,26 @@ const AlumnosInfo = () => {
           <div hidden={!isDisabledPrevias}>
             <div className="relative mt-4 mb-6">
               {/* Lista de previas */}
-              <table className="min-w-full py-1 px-0 text-sm text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer">
+              <table className="min-w-full py-1 px-0 text-sm text-secondary bg-transparent border-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer">
                 <thead>
                   <tr>
-                    <th className="text-center">Curso</th>
-                    <th className="text-center">Materia</th>
-                    <th className="text-center">Condición</th>
-                    <th className="text-center">Ciclo Lectivo</th>
-                    <th className="text-center">Acciones</th>
+                    <th className="text-center border-2 border-primary">Curso</th>
+                    <th className="text-center border-2 border-primary">Materia</th>
+                    <th className="text-center border-2 border-primary">Condición</th>
+                    <th className="text-center border-2 border-primary">Ciclo Lectivo</th>
+                    <th className="text-center border-2 border-primary">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {previa.map((previa) => (
                     <tr key={previa.id_previa}>
-                      <td className="text-center">{previa.Curso.nombre}</td>
-                      <td className="text-center">{previa.Materia.nombre}</td>
-                      <td className="text-center">{previa.id_condicion}</td>
-                      <td className="text-center">
+                      <td className="text-center border-dotted border-2 border-primary">{previa.Curso.nombre}</td>
+                      <td className="text-center border-dotted border-2 border-primary">{previa.Materia.nombre}</td>
+                      <td className="text-center border-dotted border-2 border-primary">{previa.Condicion.nombre}</td>
+                      <td className="text-center border-dotted border-2 border-primary">
                         {previa.CicloLectivo.anio}
                       </td>
-                      <td className="text-center">
+                      <td className="text-center border-dotted border-2 border-primary">
                         <div className="flex justify-center">
                           <CiEdit
                             className="text-2xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
@@ -591,6 +616,10 @@ const AlumnosInfo = () => {
                           <CiTrash
                             className="text-2xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
                             onClick={() => handleDeletePrevia(previa)}
+                          />
+                           <CiFileOn 
+                            className="text-2xl mx-3 hover:text-success hover:cursor-pointer hover:scale-125 ease-in duration-300"
+                            onClick={() => handleInscripcion(previa)}
                           />
                         </div>
                       </td>
