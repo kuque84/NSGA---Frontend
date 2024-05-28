@@ -118,14 +118,14 @@ const CicloLectivoInfo = () => {
     return (
         <div className='w-full h-fit relative my-1 mx-4'>
             <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
-                <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-2xl sm:text-4xl lg:text-5xl text-center tracking-wide py-2">
+                <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
                     Datos del Ciclo Lectivo
                 </h1>
                 <form onSubmit={handleSubmit}>
                     <div className="relative mt-4 mb-6">
                         <input
                             id="anio"
-                            className="block py-0 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                            className="block py-0 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
                             value={anio}
                             type="number"
                             autoComplete="off"
@@ -146,19 +146,19 @@ const CicloLectivoInfo = () => {
                             <button
                                 type="button"
                                 onClick={() => handleEdit()}
-                                className={`text-xs sm:text-sm lg:text-lg z-10 border  p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r ease-in duration-300 ${isDisabled ? 'border-info from-info to-primary' : 'border-warning from-warning to-yellow-500'}`}
+                                className={`text-xs sm:text-sm lg:text-base z-10 border  p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r ease-in duration-300 ${isDisabled ? 'border-info from-info to-primary' : 'border-warning from-warning to-yellow-500'}`}
                             >{isDisabled ? 'Editar' : 'Cancelar'}
                             </button>
                             <button
                                 type="submit"
-                                className='ml-5 text-xs sm:text-sm lg:text-lg z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-500 ease-in duration-300'
+                                className='ml-5 text-xs sm:text-sm lg:text-base z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-500 ease-in duration-300'
                                 hidden={isDisabled}
                             >Guardar
                             </button>
                             <button
                                 type="button"
                                 onClick={() => navigate("/ciclolectivo")}
-                                className='ml-3 text-xs sm:text-sm lg:text-lg z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300'
+                                className='ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300'
                                 hidden={!isDisabled}
                             >Volver
                             </button>
@@ -166,7 +166,7 @@ const CicloLectivoInfo = () => {
                         <button
                             onClick={() => handleDelete()}
                             type="button"
-                            className='ml-3 text-xs sm:text-sm lg:text-lg z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300'
+                            className='ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300'
                             hidden={isDisabled}
                         >Eliminar Ciclo Lectivo
                         </button>

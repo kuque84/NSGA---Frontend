@@ -56,14 +56,14 @@ const Alumnos = () => {
         <div className="bg-sky-100 border border-secondary rounded-md py-0 px-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
           <button 
               onClick={() => navigate('/alumnos/crear')} 
-              className='text-xs sm:text-sm lg:text-lg z-10 border border-primary p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300'
+              className='text-xs sm:text-sm lg:text-base z-10 border border-primary p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300'
           >
               Agregar Alumno
           </button>
         </div>
         <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
-          <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-2xl sm:text-4xl lg:text-5xl text-center tracking-wide py-2">Listado de Alumnos</h1>
-          <div className="relative mt-4 mb-6">
+          <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">Listado de Alumnos</h1>
+          <div className="relative mt-4 mb-6 ">
             <input
                 id="searchQuery"
                 className="block py-0 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer" 
@@ -78,7 +78,7 @@ const Alumnos = () => {
             />
             <label 
                 htmlFor="searchQuery"
-                className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${searchQuery ? '-translate-y-6 scale-75' : '-translate-y-1 scale-100'} top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
+                className={`peer-focus:font-medium absolute text-base sm:text-xl lg:text-2xl text-primary duration-300 transform ${searchQuery ? '-translate-y-6 scale-50' : '-translate-y-1 scale-100'} bottom-0 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
               >                  
                 Buscar Alumno:
             </label>
@@ -88,7 +88,7 @@ const Alumnos = () => {
             <ul className="grid">
                 {filteredAlumnos.map((alumno) => (
                     <Link  key={alumno.dni} to={`info/${alumno.dni}`}>
-                <li className="text-xs sm:text-sm lg:text-lg bg-primary text-secondary bg-opacity-10 hover:bg-secondary hover:text-primary cursor-pointer  p-3 m-2 rounded-md">
+                <li className="text-xs sm:text-sm lg:text-base bg-primary text-secondary bg-opacity-10 hover:bg-secondary hover:text-primary cursor-pointer  p-3 m-2 rounded-md">
                     {alumno.apellidos}, {alumno.nombres}  - DNI: {alumno.dni}
                 </li></Link>
                 ))}

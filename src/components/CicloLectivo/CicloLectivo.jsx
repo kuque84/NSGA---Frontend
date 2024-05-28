@@ -55,16 +55,16 @@ const CicloLectivo = () => {
             <div className="bg-sky-100 border border-secondary rounded-md py-0 px-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
                 <button
                     onClick={() => navigate('/ciclolectivo/crear')}
-                    className='text-xs sm:text-sm lg:text-lg z-10 border border-primary p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300'>
+                    className='text-xs sm:text-sm lg:text-base z-10 border border-primary p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300'>
                     Agregar Ciclo Lectivo
                 </button>
             </div>
             <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
-                <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-2xl sm:text-4xl lg:text-5xl text-center tracking-wide py-2">Listado de Ciclos Lectivos</h1>
+                <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">Listado de Ciclos Lectivos</h1>
                 <div className="relative mt-4 mb-6">
                     <input
                         id="searchQuery"
-                        className="block py-0 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                        className="block py-0 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
                         value={searchQuery}
                         onKeyDown={() => {loadCiclosLectivos(), setNumpage(1)}}
                         onChange={(e) => {setSearchQuery(e.target.value)}}
@@ -85,7 +85,7 @@ const CicloLectivo = () => {
                     <ul className="grid">
                         {filteredCiclosLectivos.map((cicloLectivo) => (
                             <Link key={cicloLectivo.id_ciclo} to={`info/${cicloLectivo.id_ciclo}`}>
-                                <li className="text-xs sm:text-sm lg:text-lg bg-primary text-secondary bg-opacity-10 hover:bg-secondary hover:text-primary cursor-pointer p-3 m-2 rounded-md">
+                                <li className="text-xs sm:text-sm lg:text-base bg-primary text-secondary bg-opacity-10 hover:bg-secondary hover:text-primary cursor-pointer p-3 m-2 rounded-md">
                                     Ciclo Lectivo: {cicloLectivo.anio}
                                 </li>
                             </Link>

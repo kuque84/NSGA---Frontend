@@ -11,6 +11,7 @@ import { fetchPlan } from "../../functions/previa.function";
 import { fetchMateria } from "../../functions/previa.function";
 import { fetchCondicion } from "../../functions/previa.function";
 import { fetchPrevias } from "../../functions/previa.function";
+import AlumnosInscripcion from "./AlumnosInscripcion";
 
 const AlumnosPrevias = ({ alumno }) => {
   console.log(alumno.id_alumno);
@@ -94,7 +95,7 @@ const AlumnosPrevias = ({ alumno }) => {
   const fetchPreviasData = async () => {
     try {
       if (!id_alumno) return;
-      const previaData = await fetchPrevias(id_alumno)
+      const previaData = await fetchPrevias(id_alumno);
       setPrevia(previaData);
     } catch (error) {
       console.error("Error al obtener las previas:", err);
@@ -159,6 +160,7 @@ const AlumnosPrevias = ({ alumno }) => {
 
   const handleGuardarPrevia = (event) => {
     event.preventDefault();
+    const id_calificacion = 1;
     const Previa = {
       id_alumno,
       id_condicion,
@@ -166,6 +168,7 @@ const AlumnosPrevias = ({ alumno }) => {
       id_curso,
       id_ciclo,
       id_plan,
+      id_calificacion
     };
 
     const url = id_previa
@@ -243,7 +246,7 @@ const AlumnosPrevias = ({ alumno }) => {
     <div>
       <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
         <form onSubmit={handleGuardarPrevia}>
-          <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-2xl sm:text-4xl lg:text-5xl text-center tracking-wide py-2">
+          <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
             Previas
           </h1>
           <div hidden={isDisabledPrevias}>
@@ -251,7 +254,7 @@ const AlumnosPrevias = ({ alumno }) => {
               <select
                 onChange={(e) => setid_plan(e.target.value)}
                 value={id_plan || ""}
-                className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona un Plan</option>
                 {plan
@@ -266,7 +269,7 @@ const AlumnosPrevias = ({ alumno }) => {
               <select
                 onChange={(e) => setid_curso(e.target.value)}
                 value={id_curso || ""}
-                className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona un Curso</option>
                 {curso.map((curso) => (
@@ -279,7 +282,7 @@ const AlumnosPrevias = ({ alumno }) => {
               <select
                 onChange={(e) => setid_materia(e.target.value)}
                 value={id_materia || ""}
-                className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona una Materia</option>
                 {materia.map((materia) => (
@@ -292,7 +295,7 @@ const AlumnosPrevias = ({ alumno }) => {
               <select
                 onChange={(e) => setid_condicion(e.target.value)}
                 value={id_condicion || ""}
-                className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona una Condición</option>
                 {condicion.map((condicion) => (
@@ -308,7 +311,7 @@ const AlumnosPrevias = ({ alumno }) => {
               <select
                 onChange={(e) => setid_ciclo(e.target.value)}
                 value={id_ciclo || ""}
-                className="block py-1 px-0 w-full text-lg text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
               >
                 <option value="">Selecciona un Ciclo Lectivo</option>
                 {cicloLectivo
@@ -365,17 +368,14 @@ const AlumnosPrevias = ({ alumno }) => {
                       <td className="text-center border-dotted border-2 border-primary">
                         <div className="flex justify-center">
                           <CiEdit
-                            className="text-2xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
+                            className="text-xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
                             onClick={() => handleEditPrevia(previa)}
                           />
                           <CiTrash
-                            className="text-2xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
+                            className="text-xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
                             onClick={() => handleDeletePrevia(previa)}
                           />
-                          <CiFileOn
-                            className="text-2xl mx-3 hover:text-success hover:cursor-pointer hover:scale-125 ease-in duration-300"
-                            onClick={() => handleInscripcion(previa)}
-                          />
+                          <AlumnosInscripcion previa={previa} />
                         </div>
                       </td>
                     </tr>
@@ -389,7 +389,7 @@ const AlumnosPrevias = ({ alumno }) => {
               <button
                 type="button"
                 onClick={() => handleAgregarPrevia()}
-                className={`text-xs sm:text-sm lg:text-lg z-10 border  p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r ease-in duration-300 ${
+                className={`text-xs sm:text-sm lg:text-base z-10 border  p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r ease-in duration-300 ${
                   isDisabledPrevias
                     ? "border-info from-info to-primary"
                     : "border-warning from-warning to-yellow-500"
@@ -399,7 +399,7 @@ const AlumnosPrevias = ({ alumno }) => {
               </button>
               <button
                 type="submit"
-                className="ml-5 text-xs sm:text-sm lg:text-lg z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-500 ease-in duration-300"
+                className="ml-5 text-xs sm:text-sm lg:text-base z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-500 ease-in duration-300"
                 hidden={isDisabledPrevias}
               >
                 Guardar
@@ -407,7 +407,7 @@ const AlumnosPrevias = ({ alumno }) => {
               <button
                 type="button"
                 onClick={() => navigate("/alumnos")}
-                className="ml-3 text-xs sm:text-sm lg:text-lg z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
+                className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
                 hidden={!isDisabledPrevias}
               >
                 Volver

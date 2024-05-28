@@ -24,15 +24,17 @@ import RolesInfo from './components/Roles/RolesInfo'
 import Usuarios from './components/Usuarios/Usuarios'
 import UsuariosCrear from './components/Usuarios/UsuariosCrear'
 import UsuariosInfo from './components/Usuarios/UsuariosInfo'
-
+import Examenes from './components/Examenes/Examenes'
 
 
 
 const App = () => {
 
   return (
-    <>
+    <><div className='print:hidden'>
       <NavBar />
+    </div>
+
       <Routes>
         <Route path="/" element={
           <>
@@ -44,79 +46,83 @@ const App = () => {
           </>
         }/>
         <Route path="login" element={
-          <div className="text-xl h-[80vh] flex justify-center items-center bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-center bg-cover">
             <Login />
           </div>
         }/>
         <Route path="home" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <Home />
           </div>
         }/>
         <Route path="alumnos" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <Alumnos />
           </div>
         }/>
         <Route path="alumnos/crear" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <AlumnosCrear />
           </div>
         }/>
         <Route path="alumnos/info/:dni" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <AlumnosInfo />
           </div>
         }/>
 
         <Route path="ciclolectivo" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <CicloLectivo />
           </div>
         }/>
         <Route path="ciclolectivo/crear" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <CicloLectivoCrear />
           </div>
         }/>
         <Route path="ciclolectivo/info/:id_ciclo" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <CicloLectivoInfo />
           </div>
         }/>
 
         <Route path="roles" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <Roles />
           </div>
         }/>
         <Route path="roles/crear" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <RolesCrear />
           </div>
         }/>
         <Route path="roles/info/:id_rol" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <RolesInfo />
           </div>
         }/>
-
+        <Route path='/examenes' element={
+          <div className="print:block text-base min-h-[80vh] flex justify-center items-start bg-cover">
+            <Examenes />
+            <Outlet />
+          </div>
+        }/>
         
         <Route path="usuarios" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <Usuarios />
           </div>
         }/>
         <Route path="usuarios/crear" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <UsuariosCrear />
           </div>
         }/>
         <Route path="usuarios/info/:id" element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <UsuariosInfo />
-            <Outlet /> {/*Aquí renderizar Previas.jsx */}
-            
+            <Outlet />
           </div>
         }/>
 
@@ -125,14 +131,14 @@ const App = () => {
           element={<UnderConstruction />}
         />
         <Route path='/controlpanel' element={
-          <div className="text-xl h-[80vh] flex justify-center items-start bg-cover">
+          <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <ControlPanel />
             <Outlet /> {/* Las rutas hijas de /controlpanel se renderizarán aquí */}
           </div>
         }>
         </Route>
       </Routes>
-      <footer>
+      <footer className='print:hidden'>
         <Footer />
       </footer>
     </>

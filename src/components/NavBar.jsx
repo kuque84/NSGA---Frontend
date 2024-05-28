@@ -101,19 +101,19 @@ const NavBar = (props) => {
             <div className="flex justify-between items-center">
                 <div className="flex items-center flex-shrink-0">
                     <img className='h-10 w-9 mr-2' src={logo} alt="logo" />
-                    <span className="text-xl tracking-tight">Diego de Rojas</span>
+                    <span className="text-lg tracking-tight">Diego de Rojas</span>
                 </div>
                 <ul className={`hidden lg:flex ml-14 space-x-12 ${isAuthenticated ? '' : 'invisible pointer-events-none'}`}>
                     {navItems.map((item, index) => (
-                        <li key={index} className='font-semibold hover:font-bold text-primary  hover:text-secondary duration-300'>
+                        <li key={index} className='text-base hover:text-lg font-semibold hover:font-bold text-primary  hover:text-secondary duration-300'>
                             <a href={item.href}>{item.label}</a>
                         </li>
                     ))}
                 </ul>
                 <div className="hidden lg:flex justify-center space-x-12 items-center">
                     {
-                        isAuthenticated
-                        ? <CiUser onClick={handleLogout} className='text-3xl text-secondary hover:text-red-600 hover:scale-150 hover:cursor-pointer ease-in duration-300'/> 
+                      isAuthenticated
+                      ? <CiUser onClick={handleLogout} className='text-2xl text-secondary hover:text-red-600 hover:scale-150 hover:cursor-pointer ease-in duration-300'/>
                         : <Link to="/login" className='border border-primary w-full p-3 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300'>
                             Inciar Sesión
                         </Link>
@@ -137,7 +137,7 @@ const NavBar = (props) => {
                     <div className='flex justify-center space-x-12 items-center'>
                     {
                         isAuthenticated
-                        ? <CiUser onClick={handleLogout} className='text-3xl text-secondary hover:text-red-600 hover:scale-150 hover:cursor-pointer ease-in duration-300'/>
+                        ? <CiUser onClick={handleLogout} className='text-2xl text-secondary hover:text-red-600 hover:scale-150 hover:cursor-pointer ease-in duration-300'/>
                         : <Link to="/login" className='border border-primary w-full p-3 my-4 text-neutral-300 hover:text-white rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300'>
                             Inciar Sesión
                         </Link>
