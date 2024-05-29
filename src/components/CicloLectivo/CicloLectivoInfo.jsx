@@ -102,7 +102,7 @@ const CicloLectivoInfo = () => {
                     'El ciclo lectivo ha sido eliminado.',
                     'success'
                   )
-                navigate("/ciclos-lectivos");
+                navigate("/ciclolectivo");
               })
               .catch((error) => {
                 Swal.fire(

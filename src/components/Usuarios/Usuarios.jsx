@@ -45,6 +45,9 @@ const Usuarios = () => {
         setTotalItems(response.data.count);
         setUsuarios(response.data.rows);
         setFilteredUsuarios(response.data.rows);
+
+        console.log("Usuarios:", usuarios);
+        console.log("Filtered Usuarios:", filteredUsuarios);
       })
       .catch((error) => {
         console.error("Error al obtener la lista de Usuarios:", error);

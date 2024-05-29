@@ -76,6 +76,11 @@ const UsuariosCrear = () => {
         setDummyState(!dummyState);
       };
 
+      const handleeEmailChange = (e) => {
+        setEmail(e.target.value);
+        // Cambia el estado ficticio para forzar la actualización del componente
+        setDummyState(!dummyState);
+      };
     return (
         <div className="relative justify-start w-full max-w-7xl h-fit my-1 mx-4">
             <form onSubmit={handleSubmit}>
@@ -172,7 +177,7 @@ const UsuariosCrear = () => {
                                 type="email"
                                 autoComplete="off"
                                 name="email"
-                                onChange={(e) => setEmail()}
+                                onChange={handleeEmailChange}
                                 required
                             />
                             <label
