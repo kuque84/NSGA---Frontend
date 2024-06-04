@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchCicloLectivos, fetchRac } from "../../functions/previa.function";
+import { fetchCicloLectivos, fetchRac, fetchPrevias } from "../../functions/previa.function";
 
 const AlumnosRac = () => {
   const { id_alumno: id_alumnoParam } = useParams();
   const [cicloLectivo, setCicloLectivo] = useState([]);
   const [id_ciclo, setIdCiclo] = useState("");
   const [rac, setRac] = useState([]);
+  const [previas, setPrevias] = useState([]);
+  const [turnos, setTurnos] = useState([]);
 
   useEffect(() => {
     load();
@@ -15,6 +17,7 @@ const AlumnosRac = () => {
   const load = async () => {
     await fetchCicloLectivoData();
     await fetchRacData(id_alumnoParam);
+    await fetchPreviasData(id_alumnoParam);
   };
 
   const fetchCicloLectivoData = async () => {
@@ -34,28 +37,32 @@ const AlumnosRac = () => {
     try {
       const data = await fetchRac(id_alumnoParam);
       setRac(data);
-      console.log("Rac", data);
+
+      const uniqueTurnos = [...new Set(data.map(item => item.TurnoExamen.nombre))];
+      setTurnos(uniqueTurnos);
     } catch (error) {
       console.error("Error al obtener el RAC:", error);
     }
   };
 
+  const fetchPreviasData = async (id_alumnoParam) => {
+    try {
+      const data = await fetchPrevias(id_alumnoParam);
+      console.log("Previas:", data);
+      setPrevias(data.filter(item => !item.Calificacion.aprobado));
+    } catch (error) {
+      console.error("Error al obtener las previas:", error);
+    }
+  };
+
   const getRacByCiclo = () => {
-    console.log("Current id_ciclo:", id_ciclo);
     if (!id_ciclo) return [];
-    const filteredAndSortedRac = rac.filter(item => item.TurnoExamen.id_ciclo === parseInt(id_ciclo, 10))
+    return rac.filter(item => item.TurnoExamen.id_ciclo === parseInt(id_ciclo, 10))
       .sort((a, b) => new Date(a.FechaExamen.fechaExamen) - new Date(b.FechaExamen.fechaExamen));
-    
-    console.log("Filtered and Sorted RAC:", filteredAndSortedRac);
-    return filteredAndSortedRac;
   };
 
   const getExamenesByTurno = (turno) => {
     return getRacByCiclo().filter(item => item.TurnoExamen.nombre === turno);
-  };
-
-  const getNonApprovedSubjects = () => {
-    return rac.filter(item => !item.Calificacion.aprobado);
   };
 
   return (
@@ -88,31 +95,31 @@ const AlumnosRac = () => {
           </div>
         </div>
         
-        {/* Tabla de Exámenes */}
+        {/* Tablas de Exámenes */}
         {id_ciclo && (
           <>
-            <h2 className="text-xl mt-4">Exámenes del Ciclo Lectivo {cicloLectivo.find(ciclo => ciclo.id_ciclo === id_ciclo)?.anio}</h2>
-            {["ABRIL", "JULIO", "DICIEMBRE"].map(turno => (
+            <h2 className="text-xl mt-4 text-secondary">Exámenes del Ciclo Lectivo {cicloLectivo.find(ciclo => ciclo.id_ciclo === id_ciclo)?.anio}</h2>
+            {turnos.map(turno => (
               <div key={turno}>
-                <h3 className="text-lg mt-2">Turno {turno}</h3>
-                <table className="w-full table-auto mt-2">
+                <h3 className="text-lg mt-3 text-secondary">Turno {turno}</h3>
+                <table className="min-w-full py-1 px-0 text-sm text-secondary bg-transparent border-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer">
                   <thead>
                     <tr>
-                      <th>Nombre de la Materia</th>
-                      <th>Calificación</th>
-                      <th>Libro</th>
-                      <th>Folio</th>
-                      <th>Fecha del Examen</th>
+                      <th className="text-center border-2 border-primary">Nombre de la Materia</th>
+                      <th className="text-center border-2 border-primary">Calificación</th>
+                      <th className="text-center border-2 border-primary">Libro</th>
+                      <th className="text-center border-2 border-primary">Folio</th>
+                      <th className="text-center border-2 border-primary">Fecha del Examen</th>
                     </tr>
                   </thead>
                   <tbody>
                     {getExamenesByTurno(turno).map(examen => (
                       <tr key={examen.id_examen}>
-                        <td>{examen.Previa.Materia.nombre}</td>
-                        <td>{examen.Calificacion.calificacion}</td>
-                        <td>{examen.libro}</td>
-                        <td>{examen.folio}</td>
-                        <td>{new Date(examen.FechaExamen.fechaExamen).toLocaleDateString()}</td>
+                        <td className="text-center border-dotted border-2 border-primary">{examen.Previa.Materia.nombre}</td>
+                        <td className="text-center border-dotted border-2 border-primary">{examen.Calificacion.calificacion || 'Aus.'}</td>
+                        <td className="text-center border-dotted border-2 border-primary">{examen.libro || '-'}</td>
+                        <td className="text-center border-dotted border-2 border-primary">{examen.folio || '-'}</td>
+                        <td className="text-center border-dotted border-2 border-primary">{new Date(examen.FechaExamen.fechaExamen).toLocaleDateString()}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -123,30 +130,36 @@ const AlumnosRac = () => {
         )}
 
         {/* Tabla de Materias no aprobadas */}
-        <h2 className="text-xl mt-4">Materias No Aprobadas</h2>
-        <table className="w-full table-auto mt-2">
-          <thead>
-            <tr>
-              <th>Nombre de la Materia</th>
-              <th>Calificación</th>
-              <th>Libro</th>
-              <th>Folio</th>
-              <th>Fecha del Examen</th>
-            </tr>
-          </thead>
-          <tbody>
-            {getNonApprovedSubjects().map(materia => (
-              <tr key={materia.id_examen}>
-                <td>{materia.Previa.Materia.nombre}</td>
-                <td>{materia.Calificacion.calificacion}</td>
-                <td>{materia.libro}</td>
-                <td>{materia.folio}</td>
-                <td>{new Date(materia.FechaExamen.fechaExamen).toLocaleDateString()}</td>
+        <h2 className="text-xl mt-4 text-secondary">Materias No Aprobadas</h2>
+        {previas.length > 0 ? (
+          <table className="min-w-full py-1 px-0 text-sm text-secondary bg-transparent border-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer">
+            <thead>
+              <tr>
+                <th className="text-center border-2 border-primary">Nombre de la Materia</th>
+                <th className="text-center border-2 border-primary">Condición</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {previas.map(materia => (
+                <tr key={materia.id_previa}>
+                  <td className="text-center border-dotted border-2 border-primary">{materia.Materia.nombre}</td>
+                  <td className="text-center border-dotted border-2 border-primary">{materia.Condicion.nombre}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="text-center text-secondary">El alumno no tiene materias previas no aprobadas</p>
+        )}
+              <button
+            type="button"
+            onClick={() => window.print()}
+            className="print:hidden ml-5 text-xs sm:text-sm lg:text-base z-10 border border-info p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-info to-blue-800 ease-in duration-300"
+          >
+            Imprimir
+          </button>
       </div>
+
     </div>
   );
 };
