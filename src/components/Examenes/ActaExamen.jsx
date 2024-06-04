@@ -6,8 +6,6 @@ import Swal from "sweetalert2";
 const API_URL = settings.API_URL;
 
 const ActaExamen = ({ examen }) => {
-  console.table(examen);
-  //console.log("examen[0].FechaExamen.fechaExamen: ",examen[0].FechaExamen.fechaExamen);
   const [calificacion, setCalificacion] = useState([]);
   const [id_calificacion, setid_calificacion] = useState(
     examen.map((e) => e.id_calificacion || "")
@@ -25,9 +23,13 @@ const ActaExamen = ({ examen }) => {
       setCalificacion(calificacionData);
     };
     loadCalificacion();
+    // console.log("Examen: ");
+    // console.table(examen);
+    // console.log("Calificacion: ");
+    // console.table(calificacion); 
   }, []);
 
-  const handleGuardar = () => {
+  const handleGuardar1 = () => {
     const acta = examen.map((e, index) => ({
       id_inscripcion: e.id_inscripcion,
       id_calificacion: id_calificacion[index],
@@ -70,6 +72,18 @@ const ActaExamen = ({ examen }) => {
           console.log(error);
         });
 
+        console.log("Calificacion: ");
+        console.table(calificacion);
+        console.log("item.id_calificacion: ", item.id_calificacion);
+
+        let calificacionEncontrada = calificacion.find((calificacionItem) => calificacionItem.id_calificacion === item.id_calificacion);
+        if(calificacionEncontrada) {
+            console.log("calificacion.aprobado: ", calificacionEncontrada.aprobado);
+        } else {
+            console.log("No se encontró la calificación correspondiente");
+        }
+
+        
       await axios
         .put(`${API_URL}/inscripcion/actualizar/${item.id_inscripcion}`, item, {
           headers: {
@@ -90,6 +104,65 @@ const ActaExamen = ({ examen }) => {
         });
     });
   };
+
+  const handleGuardar = () => {
+    let fechaExamenLocal = new Date(fechaExamen);
+    fechaExamenLocal.setMinutes(
+      fechaExamenLocal.getMinutes() - fechaExamenLocal.getTimezoneOffset()
+    );
+
+    const previa = examen.map((e, index) => ({
+      id_previa: e.id_previa,
+      id_calificacion: id_calificacion[index],
+    }));
+
+    const fecha = {
+      id_fechaExamen: examen[0].id_fechaExamen,
+      fechaExamen: fechaExamenLocal.toISOString(),
+    };
+
+    const inscripcion = examen.map((e, index) => ({
+      ...e,
+      id_calificacion: id_calificacion[index],
+    }));
+
+    const acta = {
+      inscripcion: inscripcion,
+      libro: libro,
+      folio: folio,
+      fecha: fecha,
+      previa: previa,
+    };
+
+    console.log("Acta: ");
+    console.table(acta);
+
+    axios
+      .put(`${API_URL}/inscripcion/acta/`, acta, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((response) => {
+        Swal.fire("Datos actualizados", "Datos almacenados con éxito", "success");
+      })
+      .catch((error) => {
+        console.error('Error al actualizar el acta:', error.message);
+        if (error.response) {
+          // El servidor respondió con un código de estado fuera del rango de 2xx
+          console.error('Datos de la respuesta de error:', error.response.data);
+          console.error('Código de estado:', error.response.status);
+          console.error('Encabezados de respuesta:', error.response.headers);
+        } else if (error.request) {
+          // La solicitud fue hecha pero no se recibió respuesta
+          console.error('Datos de la solicitud sin respuesta:', error.request);
+        } else {
+          // Algo ocurrió al configurar la solicitud que lanzó un error
+          console.error('Error en la solicitud:', error.message);
+        }
+        Swal.fire("Error", "No se pudo actualizar los datos. Por favor, inténtelo nuevamente.", "error");
+      });
+};
 
   return (
     <div className=" bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">

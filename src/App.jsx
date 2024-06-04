@@ -25,6 +25,7 @@ import Usuarios from './components/Usuarios/Usuarios'
 import UsuariosCrear from './components/Usuarios/UsuariosCrear'
 import UsuariosInfo from './components/Usuarios/UsuariosInfo'
 import Examenes from './components/Examenes/Examenes'
+import AlumnosRac from './components/Alumnos/AlumnosRac'
 
 
 
@@ -68,6 +69,12 @@ const App = () => {
         <Route path="alumnos/info/:dni" element={
           <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
             <AlumnosInfo />
+          </div>
+        }/>
+
+        <Route path="alumnos/rac/:id_alumno" element={
+          <div className="print:block text-base min-h-[80vh] flex justify-center items-start bg-cover">
+            <AlumnosRac />
           </div>
         }/>
 

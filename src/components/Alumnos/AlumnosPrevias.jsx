@@ -34,33 +34,16 @@ const AlumnosPrevias = ({ alumno }) => {
   const [id_previa, setid_previa] = useState(undefined);
   const [dummyState, setDummyState] = useState(false);
 
-  const [planDefaultLabel, setPlanDefaultLabel] =
-    useState("Selecciona un Plan");
-  const [cursoDefaultLabel, setCursoDefaultLabel] = useState(
-    "Selecciona un Curso"
-  );
-  const [materiaDefaultLabel, setMateriaDefaultLabel] = useState(
-    "Selecciona una Materia"
-  );
-  const [condicionDefaultLabel, setCondicionDefaultLabel] = useState(
-    "Selecciona una Condición"
-  );
-  const [cicloDefaultLabel, setCicloDefaultLabel] = useState(
-    "Selecciona un Ciclo Lectivo"
-  );
+  const [planDefaultLabel, setPlanDefaultLabel] = useState("Selecciona un Plan");
+  const [cursoDefaultLabel, setCursoDefaultLabel] = useState("Selecciona un Curso");
+  const [materiaDefaultLabel, setMateriaDefaultLabel] = useState("Selecciona una Materia");
+  const [condicionDefaultLabel, setCondicionDefaultLabel] = useState("Selecciona una Condición");
+  const [cicloDefaultLabel, setCicloDefaultLabel] = useState("Selecciona un Ciclo Lectivo");
 
   useEffect(() => {
     //console.log("useEffect por carga de load");
     load();
-  }, [
-    id_alumno,
-    id_plan,
-    id_curso,
-    id_materia,
-    id_condicion,
-    id_ciclo,
-    dummyState,
-  ]);
+  }, [id_alumno, id_plan, id_curso, id_materia, id_condicion, id_ciclo, dummyState]);
 
   const resetDefaultLabels = () => {
     setPlanDefaultLabel("Selecciona un Plan");
@@ -168,12 +151,10 @@ const AlumnosPrevias = ({ alumno }) => {
       id_curso,
       id_ciclo,
       id_plan,
-      id_calificacion
+      id_calificacion,
     };
 
-    const url = id_previa
-      ? `${API_URL}/previa/actualizar/${id_previa}`
-      : `${API_URL}/previa/nuevo`;
+    const url = id_previa ? `${API_URL}/previa/actualizar/${id_previa}` : `${API_URL}/previa/nuevo`;
     const method = id_previa ? "put" : "post";
 
     axios[method](url, Previa, {
@@ -182,28 +163,16 @@ const AlumnosPrevias = ({ alumno }) => {
       },
     })
       .then((response) => {
-        Swal.fire(
-          "Datos actualizados",
-          "Datos almacenados con éxito",
-          "success"
-        );
+        Swal.fire("Datos actualizados", "Datos almacenados con éxito", "success");
         resetPreviaFields();
         handleAgregarPrevia();
         setDummyState(!dummyState);
       })
       .catch((error) => {
         if (error.response && error.response.status === 400) {
-          Swal.fire(
-            "No se pudo guardar la previa",
-            `${error.response.data.message}`,
-            "info"
-          );
+          Swal.fire("No se pudo guardar la previa", `${error.response.data.message}`, "info");
         } else if (error.response && error.response.status === 409) {
-          Swal.fire(
-            "No se pudo guardar la previa",
-            `${error.response.data.message}`,
-            "error"
-          );
+          Swal.fire("No se pudo guardar la previa", `${error.response.data.message}`, "error");
         } else {
           Swal.fire("Error", "Hubo un error al guardar la previa", "error");
         }
@@ -230,9 +199,7 @@ const AlumnosPrevias = ({ alumno }) => {
           })
           .then((response) => {
             Swal.fire("¡Eliminado!", "La previa ha sido eliminada.", "success");
-            setPrevia((previas) =>
-              previas.filter((previa) => previa.id_previa !== id_previa)
-            );
+            setPrevia((previas) => previas.filter((previa) => previa.id_previa !== id_previa));
             setDummyState(!dummyState);
           })
           .catch((error) => {
@@ -299,10 +266,7 @@ const AlumnosPrevias = ({ alumno }) => {
               >
                 <option value="">Selecciona una Condición</option>
                 {condicion.map((condicion) => (
-                  <option
-                    key={condicion.id_condicion}
-                    value={condicion.id_condicion}
-                  >
+                  <option key={condicion.id_condicion} value={condicion.id_condicion}>
                     {condicion.nombre}
                   </option>
                 ))}
@@ -317,10 +281,7 @@ const AlumnosPrevias = ({ alumno }) => {
                 {cicloLectivo
                   .sort((a, b) => b.id_ciclo - a.id_ciclo)
                   .map((cicloLectivo) => (
-                    <option
-                      key={cicloLectivo.id_ciclo}
-                      value={cicloLectivo.id_ciclo}
-                    >
+                    <option key={cicloLectivo.id_ciclo} value={cicloLectivo.id_ciclo}>
                       {cicloLectivo.anio}
                     </option>
                   ))}
@@ -333,21 +294,11 @@ const AlumnosPrevias = ({ alumno }) => {
               <table className="min-w-full py-1 px-0 text-sm text-secondary bg-transparent border-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer">
                 <thead>
                   <tr>
-                    <th className="text-center border-2 border-primary">
-                      Curso
-                    </th>
-                    <th className="text-center border-2 border-primary">
-                      Materia
-                    </th>
-                    <th className="text-center border-2 border-primary">
-                      Condición
-                    </th>
-                    <th className="text-center border-2 border-primary">
-                      Ciclo Lectivo
-                    </th>
-                    <th className="text-center border-2 border-primary">
-                      Acciones
-                    </th>
+                    <th className="text-center border-2 border-primary">Curso</th>
+                    <th className="text-center border-2 border-primary">Materia</th>
+                    <th className="text-center border-2 border-primary">Condición</th>
+                    <th className="text-center border-2 border-primary">Ciclo Lectivo</th>
+                    <th className="text-center border-2 border-primary">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -411,6 +362,15 @@ const AlumnosPrevias = ({ alumno }) => {
                 hidden={!isDisabledPrevias}
               >
                 Volver
+              </button>
+            </div>
+            <div>
+              <button
+                type="button"
+                onClick={() => navigate("/alumnos/rac/" + id_alumno)}
+                className="text-xs sm:text-sm lg:text-base z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-800 ease-in duration-300"
+>
+  RAC
               </button>
             </div>
           </div>

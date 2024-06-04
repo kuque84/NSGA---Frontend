@@ -16,7 +16,6 @@ import user6 from "../assets/profile-pictures/user6.jpg";
 export const navItems = [
   { label: "Alumnos", href: "/alumnos" },
   { label: "Exámenes", href: "/examenes" },
-  { label: "Actas y Permisos", href: "/actas" },
   { label: "Panel de Control", href: "/controlpanel" },
 ];
 

@@ -27,6 +27,7 @@ export const fetchPrevias = (id_alumno) => fetchData(`/previa/filtrar/id_alumno/
 export const fetchTurno = (id_ciclo) => fetchData(`/turnoexamen/filtrar/id_ciclo/${id_ciclo}`);
 export const fetchInscripcion = (id_turno) => fetchData('/inscripcion/filtrar/id_turno/' + id_turno);
 export const fetchCalificacion = () => fetchData('/calificacion/lista');
+export const fetchRac = (id_alumno) => fetchData(`/inscripcion/rac/${id_alumno}`);
 
 export const fetchFechaExamenInscripcion = async (id_materia, id_turno) => {
   try {
