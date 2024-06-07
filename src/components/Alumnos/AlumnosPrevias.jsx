@@ -79,6 +79,7 @@ const AlumnosPrevias = ({ alumno }) => {
     try {
       if (!id_alumno) return;
       const previaData = await fetchPrevias(id_alumno);
+      console.log(previaData);
       setPrevia(previaData);
     } catch (error) {
       console.error("Error al obtener las previas:", err);
@@ -303,12 +304,18 @@ const AlumnosPrevias = ({ alumno }) => {
                 </thead>
                 <tbody>
                   {previa.map((previa) => (
-                    <tr key={previa.id_previa}>
+                    <tr
+                      key={previa.id_previa}
+                      className={`${
+                        previa.Calificacion.aprobado ? "text-success" : "text-secondary"
+                      }`}
+                    >
                       <td className="text-center border-dotted border-2 border-primary">
                         {previa.Curso.nombre}
                       </td>
-                      <td className="text-center border-dotted border-2 border-primary">
+                      <td className={`text-center border-dotted border-2 border-primary`}>
                         {previa.Materia.nombre}
+                        {previa.Calificacion.aprobado ? " - APROBADO" : ""}
                       </td>
                       <td className="text-center border-dotted border-2 border-primary">
                         {previa.Condicion.nombre}
@@ -318,14 +325,36 @@ const AlumnosPrevias = ({ alumno }) => {
                       </td>
                       <td className="text-center border-dotted border-2 border-primary">
                         <div className="flex justify-center">
-                          <CiEdit
+                          {/* <CiEdit
                             className="text-xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
                             onClick={() => handleEditPrevia(previa)}
-                          />
-                          <CiTrash
+                            title="Editar Previa"
+                          /> */}
+                          <div className="relative group">
+                            <CiEdit
+                              className="text-xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
+                              onClick={() => handleEditPrevia(previa)}
+                            />
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-warning bg-opacity-80 rounded">
+                              Editar Previa
+                              <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-warning bg-opacity-80"></div>
+                            </div>
+                          </div>
+                          {/* <CiTrash
                             className="text-xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
                             onClick={() => handleDeletePrevia(previa)}
-                          />
+                            title="Eliminar Previa"
+                          /> */}
+                          <div className="relative group">
+                            <CiTrash
+                              className="text-xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
+                              onClick={() => handleDeletePrevia(previa)}
+                            />
+                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-danger bg-opacity-80 rounded">
+                              Eliminar Previa
+                              <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-danger bg-opacity-80"></div>
+                            </div>
+                          </div>
                           <AlumnosInscripcion previa={previa} />
                         </div>
                       </td>
@@ -369,8 +398,8 @@ const AlumnosPrevias = ({ alumno }) => {
                 type="button"
                 onClick={() => navigate("/alumnos/rac/" + id_alumno)}
                 className="text-xs sm:text-sm lg:text-base z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-800 ease-in duration-300"
->
-  RAC
+              >
+                RAC
               </button>
             </div>
           </div>
