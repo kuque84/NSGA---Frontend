@@ -153,7 +153,7 @@ const AlumnosInscripcion = ({ previa }) => {
         />
         <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-success bg-opacity-80 rounded">
           Inscripción a Examen
-          <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-succeess bg-opacity-80"></div>
+          <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-success bg-opacity-80"></div>
         </div>
       </div>
     </div>
