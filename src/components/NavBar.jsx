@@ -92,7 +92,7 @@ const NavBar = (props) => {
     <nav className="sticky top-0 z-50 py-3 my-4 backdrop-blur-lg border-b border-secondary/80">
       <div className="container px-4 mx-auto relative text-sm">
         <div className="flex justify-between items-center">
-          <div className="w-72 flex items-center flex-shrink-0">
+          <div className="lg:w-72 flex items-center flex-shrink-0">
             <img className="h-10 w-9 mr-2" src={logo} alt="logo" />
             <span className="text-lg tracking-tight">Diego de Rojas</span>
           </div>
@@ -110,7 +110,7 @@ const NavBar = (props) => {
               </li>
             ))}
           </ul>
-          <div className="w-72 flex justify-end flex-shrink-0">
+          <div className="lg:w-72 flex justify-end flex-shrink-0">
             <div className="hidden lg:flex justify-center space-x-12 items-center">
               {isAuthenticated ? (
                 <CiUser

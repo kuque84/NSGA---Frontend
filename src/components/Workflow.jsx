@@ -4,8 +4,8 @@ import { checklistItems } from "../constants"
 
 const Workflow = () => {
   return (
-    <div className="mt-20">
-        <h2 className="text-2xl sm:text-4xl lg:text-5xl text-center mt-6">Simplifica la gestión{" "}
+    <div className="mt-20 mx-3">
+        <h2 className="text-2xl sm:text-4xl lg:text-5xl text-center mt-6 mb-4">Simplifica la gestión{" "}
         <span className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text">académica con NSGA.</span>
         </h2>
         <div className="flex flex-wrap justify-center">

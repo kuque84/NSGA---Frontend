@@ -52,6 +52,8 @@ const AlumnosInscripcion = ({ previa }) => {
       inputOptions: cicloLectivoOptions,
       inputPlaceholder: "Seleccione el ciclo lectivo",
       showCancelButton: true,
+      allowOutsideClick: false, // Deshabilitar clic fuera del modal
+
     });
 
     if (id_ciclo) {
@@ -67,6 +69,8 @@ const AlumnosInscripcion = ({ previa }) => {
         inputOptions: turnoOptions,
         inputPlaceholder: "Seleccione el turno",
         showCancelButton: true,
+        allowOutsideClick: false, // Deshabilitar clic fuera del modal
+
       });
 
       if (id_turno) {
