@@ -18,6 +18,10 @@ export async function loginService(dni, password) {
 
         // Almacena token en localStorage
         localStorage.setItem('token', response.data.usuario.token);
+        localStorage.setItem('dni', response.data.usuario.dni);
+        localStorage.setItem('nombre', response.data.usuario.nombres);
+        localStorage.setItem('apellido', response.data.usuario.apellidos);
+        localStorage.setItem('id_rol', response.data.usuario.id_rol);
         data = response.data.usuario;
         const Authenticated = true;
         //console.log("Token almacenado localmente: ", localStorage.getItem('token'));
