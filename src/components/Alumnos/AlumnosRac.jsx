@@ -38,6 +38,7 @@ const AlumnosRac = () => {
     try {
       const data = await fetchRac(id_alumnoParam);
       setRac(data);
+      console.log("RAC:", data); //muestra en consola los datos de la variable data RAC
 
       const uniqueTurnos = [...new Set(data.map((item) => item.TurnoExamen.nombre))];
       setTurnos(uniqueTurnos);
@@ -119,6 +120,8 @@ const AlumnosRac = () => {
                   <thead>
                     <tr>
                       <th className="text-center border-2 border-primary">Nombre de la Materia</th>
+                      <th className="text-center border-2 border-primary">Curso</th>
+                      <th className="text-center border-2 border-primary">Condición</th>
                       <th className="text-center border-2 border-primary">Calificación</th>
                       <th className="text-center border-2 border-primary">Libro</th>
                       <th className="text-center border-2 border-primary">Folio</th>
@@ -130,6 +133,12 @@ const AlumnosRac = () => {
                       <tr key={examen.id_examen}>
                         <td className="text-center border-dotted border-2 border-primary">
                           {examen.Previa.Materia.nombre}
+                        </td>
+                        <td className="text-center border-dotted border-2 border-primary">
+                          {examen.Previa.Curso}
+                        </td>
+                        <td className="text-center border-dotted border-2 border-primary">
+                          {examen.Previa.Condicion.nombre}
                         </td>
                         <td className="text-center border-dotted border-2 border-primary">
                           {examen.Calificacion.calificacion || "Aus."}
