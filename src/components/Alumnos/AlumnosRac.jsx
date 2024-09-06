@@ -135,7 +135,7 @@ const AlumnosRac = () => {
                           {examen.Previa.Materia.nombre}
                         </td>
                         <td className="text-center border-dotted border-2 border-primary">
-                          {examen.Previa.Curso}
+                          {examen.Previa.Curso.nombre}
                         </td>
                         <td className="text-center border-dotted border-2 border-primary">
                           {examen.Previa.Condicion.nombre}
@@ -192,7 +192,8 @@ const AlumnosRac = () => {
         <div className="mt-4">
         <button
                 type="button"
-                onClick={() => navigate(`/alumnos/info/${rac[0].Previa.Alumno.dni}`)}
+                onClick={() => window.history.back()}
+                //onClick={() => navigate(`/alumnos/info/${rac[0].Previa.Alumno.dni}`)}
                 className="print:hidden ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
               >
                 Volver

@@ -45,6 +45,8 @@ const Examenes = () => {
     setCondicion(condicionesData);
   };
 
+  const userRole = localStorage.getItem("id_rol");
+
   useEffect(() => {
     loadSelects();
   }, []);
@@ -107,6 +109,7 @@ const Examenes = () => {
         <h1 className="print:block bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
           Examenes
         </h1>
+        {userRole <= 4 ? (<>
         <div className="relative mt-4 mb-6">
           <select
             onChange={(e) => setid_plan(e.target.value)}
@@ -196,7 +199,13 @@ const Examenes = () => {
           >
             Filtrar
           </button>
+          
         </div>
+        </>) 
+        : 
+        <span className="text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-danger dark:text-white rounded-md">
+          No tiene permisos para acceder a esta sección
+        </span>}
       </div>
       {examen.length > 0 && <ActaExamen examen={examen} />}
     </div>

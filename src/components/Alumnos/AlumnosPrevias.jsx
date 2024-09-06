@@ -14,7 +14,7 @@ import { fetchPrevias } from "../../functions/previa.function";
 import AlumnosInscripcion from "./AlumnosInscripcion";
 
 const AlumnosPrevias = ({ alumno }) => {
-  console.log(alumno.id_alumno);
+  //console.log(alumno.id_alumno);
 
   const id_alumno = alumno.id_alumno;
   const [isDisabledPrevias, setIsDisabledPrevias] = useState(true);
@@ -39,6 +39,8 @@ const AlumnosPrevias = ({ alumno }) => {
   const [materiaDefaultLabel, setMateriaDefaultLabel] = useState("Selecciona una Materia");
   const [condicionDefaultLabel, setCondicionDefaultLabel] = useState("Selecciona una Condición");
   const [cicloDefaultLabel, setCicloDefaultLabel] = useState("Selecciona un Ciclo Lectivo");
+
+  const userRole = localStorage.getItem('id_rol');
 
   useEffect(() => {
     //console.log("useEffect por carga de load");
@@ -69,6 +71,7 @@ const AlumnosPrevias = ({ alumno }) => {
     fetchMateriaData();
     fetchCondicionData();
     resetDefaultLabels();
+    //console.log("userRole", userRole);
   };
 
   const handleAgregarPrevia = () => {
@@ -79,7 +82,7 @@ const AlumnosPrevias = ({ alumno }) => {
     try {
       if (!id_alumno) return;
       const previaData = await fetchPrevias(id_alumno);
-      console.log(previaData);
+      //console.log(previaData);
       setPrevia(previaData);
     } catch (error) {
       console.error("Error al obtener las previas:", err);
@@ -324,39 +327,44 @@ const AlumnosPrevias = ({ alumno }) => {
                         {previa.CicloLectivo.anio}
                       </td>
                       <td className="text-center border-dotted border-2 border-primary">
-                        <div className="flex justify-center">
-                          {/* <CiEdit
-                            className="text-xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
-                            onClick={() => handleEditPrevia(previa)}
-                            title="Editar Previa"
-                          /> */}
-                          <div className="relative group">
-                            <CiEdit
+                      {/* Condicionar la visibilidad según el rol */}
+                        {userRole < 4 ? (
+                          <div className="flex justify-center">
+                            {/* <CiEdit
                               className="text-xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
                               onClick={() => handleEditPrevia(previa)}
-                            />
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-warning bg-opacity-80 rounded">
-                              Editar Previa
-                              <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-warning bg-opacity-80"></div>
+                              title="Editar Previa"
+                            /> */}
+                            <div className="relative group">
+                              <CiEdit
+                                className="text-xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
+                                onClick={() => handleEditPrevia(previa)}
+                              />
+                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-warning bg-opacity-80 rounded">
+                                Editar Previa
+                                <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-warning bg-opacity-80"></div>
+                              </div>
                             </div>
-                          </div>
-                          {/* <CiTrash
-                            className="text-xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
-                            onClick={() => handleDeletePrevia(previa)}
-                            title="Eliminar Previa"
-                          /> */}
-                          <div className="relative group">
-                            <CiTrash
+                            {/* <CiTrash
                               className="text-xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
                               onClick={() => handleDeletePrevia(previa)}
-                            />
-                            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-danger bg-opacity-80 rounded">
-                              Eliminar Previa
-                              <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-danger bg-opacity-80"></div>
+                              title="Eliminar Previa"
+                            /> */}
+                            {userRole <= 1 ? (
+                            <div className="relative group">
+                              <CiTrash
+                                className="text-xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
+                                onClick={() => handleDeletePrevia(previa)}
+                              />
+                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-danger bg-opacity-80 rounded">
+                                Eliminar Previa
+                                <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-danger bg-opacity-80"></div>
+                              </div>
                             </div>
+                            ) : null}
+                            <AlumnosInscripcion previa={previa} />
                           </div>
-                          <AlumnosInscripcion previa={previa} />
-                        </div>
+                        ) : null}
                       </td>
                     </tr>
                   ))}
