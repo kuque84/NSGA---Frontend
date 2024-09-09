@@ -154,25 +154,68 @@ export const pricingOptions = [
 ];
 
 export const resourcesLinks = [
-  { href: "#", text: "Getting Started" },
-  { href: "#", text: "Documentation" },
-  { href: "#", text: "Tutorials" },
-  { href: "#", text: "API Reference" },
-  { href: "#", text: "Community Forums" },
+  { 
+    href: "https://www.cba.gov.ar/", 
+    text: "Gobierno de Córdoba", 
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },
+  { 
+    href: "https://cidi.cba.gov.ar/portal-publico/", 
+    text: "Ciudadano Digital", 
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },  
+  { 
+    href: "https://gestionestudiantes.cba.gov.ar/", 
+    text: "Gestión de Estudiantes", 
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },
+  { 
+    href: "https://empleadodigital.cba.gov.ar/", 
+    text: "Empleado Digital", 
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },
+  { 
+    href: "https://sites.google.com/ipem168.com/ipem168", 
+    text: "IPEM Nº 168 'Diego de Rojas'", 
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },
+  { href: "#", text: "Tutoriales" },
 ];
 
 export const platformLinks = [
-  { href: "#", text: "Features" },
-  { href: "#", text: "Supported Devices" },
-  { href: "#", text: "System Requirements" },
-  { href: "#", text: "Downloads" },
-  { href: "#", text: "Release Notes" },
+  { 
+    href: "https://accounts.google.com/signin/v2/identifier?continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ltmpl=default&hd=ipem168.com&service=mail&sacu=1&rip=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin", 
+    text: "Correo académico IPEM 168", 
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },
+  { 
+    href: "https://portal.office.com/", 
+    text: "Correo Institucional Ministerio de Educación", 
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },
 ];
 
 export const communityLinks = [
-  { href: "#", text: "Events" },
-  { href: "#", text: "Meetups" },
-  { href: "#", text: "Conferences" },
-  { href: "#", text: "Hackathons" },
-  { href: "#", text: "Jobs" },
+  { href: "https://www.google.com/url?q=https%3A%2F%2Fwww.facebook.com%2Fdiego.derojas.5&sa=D&sntz=1&usg=AOvVaw0wtCKlR5iYRrk_bPmQqYsV", 
+    text: "Facebook",
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },
+  { href: "https://www.google.com/url?q=https%3A%2F%2Fwww.instagram.com%2Fdiegoderojas.ipem168%2F&sa=D&sntz=1&usg=AOvVaw3lEPGrROIuNpO362ZG-jNA", 
+    text: "Instagram",
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },
+  { href: "http://www.google.com/url?q=http%3A%2F%2Fwa.me%2F5493546406870&sa=D&sntz=1&usg=AOvVaw3nV6plSYlCZ9bljbbGY9Ui", 
+    text: "WhatsApp" ,
+    target: "_blank", 
+    rel: "noopener noreferrer" 
+  },
 ];
