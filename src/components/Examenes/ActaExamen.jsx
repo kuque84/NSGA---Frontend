@@ -3,6 +3,8 @@ import { fetchCalificacion } from "../../functions/previa.function";
 import axios from "axios";
 import settings from "../../Config/index";
 import Swal from "sweetalert2";
+import { downloadPDF } from '../../functions/downloadPDF';
+
 const API_URL = settings.API_URL;
 
 const ActaExamen = ({ examen }) => {
@@ -162,6 +164,13 @@ const ActaExamen = ({ examen }) => {
         }
         Swal.fire("Error", "No se pudo actualizar los datos. Por favor, inténtelo nuevamente.", "error");
       });
+
+};
+
+const handleDownload = () => {
+  const endpoint = `/acta/examen/pdf`; // Ajusta el endpoint según tu configuración backend
+  const filename = 'acta_examen.pdf';
+  downloadPDF(endpoint, filename);
 };
 
   return (
@@ -297,6 +306,12 @@ const ActaExamen = ({ examen }) => {
             className="print:hidden ml-5 text-xs sm:text-sm lg:text-base z-10 border border-info p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-info to-blue-800 ease-in duration-300"
           >
             Imprimir
+          </button>
+
+          <button 
+            onClick={handleDownload}
+          >
+            Descargar PDF
           </button>
         </div>
       </div>
