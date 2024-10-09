@@ -70,8 +70,13 @@ const AlumnosRac = () => {
   };
 
   const handleDownload = () => {
-    const endpoint = `/acta/rac/pdf`; // Ajusta el endpoint según tu configuración backend
+    const dni = rac[0].Previa.Alumno.dni;
+    const endpoint = `/acta/rac/pdf?id_alumno=${id_alumnoParam}&id_ciclo=${id_ciclo}`; // Ajusta el endpoint según tu configuración backend
     const filename = `${rac[0].Previa.Alumno.apellidos} ${rac[0].Previa.Alumno.nombres}.pdf`;
+    console.log('id_alumno:', id_alumnoParam);
+    console.log('id_ciclo:', id_ciclo);
+    console.log('Apellidos:', rac[0].Previa.Alumno.apellidos);
+    console.log('Nombres:', rac[0].Previa.Alumno.nombres);
     downloadPDF(endpoint, filename);
   };
 
