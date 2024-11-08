@@ -25,7 +25,6 @@ import Usuarios from './components/Usuarios/Usuarios';
 import UsuariosCrear from './components/Usuarios/UsuariosCrear';
 import UsuariosInfo from './components/Usuarios/UsuariosInfo';
 import Examenes from './components/Examenes/Examenes';
-import Examenes2 from './components/Examenes/Examenes2';
 import AlumnosRac from './components/Alumnos/AlumnosRac';
 import UiKit from './components/UiKit';
 import UiKit2 from './components/UiKit-2';
@@ -154,15 +153,6 @@ const App = () => {
           element={
             <div className='print:block text-base min-h-[80vh] flex justify-center items-start bg-cover'>
               <Examenes />
-              <Outlet />
-            </div>
-          }
-        />
-        <Route
-          path='/examenes2'
-          element={
-            <div className='print:block text-base min-h-[80vh] flex justify-center items-start bg-cover'>
-              <Examenes2 />
               <Outlet />
             </div>
           }
