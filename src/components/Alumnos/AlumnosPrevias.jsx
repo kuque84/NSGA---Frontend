@@ -1,20 +1,21 @@
-import { useParams, Link } from "react-router-dom";
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import settings from "../../Config/index";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-import { CiEdit, CiFileOn, CiTrash } from "react-icons/ci";
-import { fetchCurso } from "../../functions/previa.function";
-import { fetchCicloLectivos } from "../../functions/previa.function";
-import { fetchPlan } from "../../functions/previa.function";
-import { fetchMateria } from "../../functions/previa.function";
-import { fetchCondicion } from "../../functions/previa.function";
-import { fetchPrevias } from "../../functions/previa.function";
-import AlumnosInscripcion from "./AlumnosInscripcion";
+import { useParams, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import settings from '../../Config/index';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+import { CiEdit, CiFileOn, CiTrash } from 'react-icons/ci';
+import { fetchCurso } from '../../functions/previa.function';
+import { fetchCicloLectivos } from '../../functions/previa.function';
+import { fetchPlan } from '../../functions/previa.function';
+import { fetchMateria } from '../../functions/previa.function';
+import { fetchCondicion } from '../../functions/previa.function';
+import { fetchPrevias } from '../../functions/previa.function';
+import AlumnosInscripcion from './AlumnosInscripcion';
 
 const AlumnosPrevias = ({ alumno }) => {
   //console.log(alumno.id_alumno);
+  //console.log('AlumnoPrevias Alumno:', alumno);
 
   const id_alumno = alumno.id_alumno;
   const [isDisabledPrevias, setIsDisabledPrevias] = useState(true);
@@ -34,11 +35,11 @@ const AlumnosPrevias = ({ alumno }) => {
   const [id_previa, setid_previa] = useState(undefined);
   const [dummyState, setDummyState] = useState(false);
 
-  const [planDefaultLabel, setPlanDefaultLabel] = useState("Selecciona un Plan");
-  const [cursoDefaultLabel, setCursoDefaultLabel] = useState("Selecciona un Curso");
-  const [materiaDefaultLabel, setMateriaDefaultLabel] = useState("Selecciona una Materia");
-  const [condicionDefaultLabel, setCondicionDefaultLabel] = useState("Selecciona una Condición");
-  const [cicloDefaultLabel, setCicloDefaultLabel] = useState("Selecciona un Ciclo Lectivo");
+  const [planDefaultLabel, setPlanDefaultLabel] = useState('Selecciona un Plan');
+  const [cursoDefaultLabel, setCursoDefaultLabel] = useState('Selecciona un Curso');
+  const [materiaDefaultLabel, setMateriaDefaultLabel] = useState('Selecciona una Materia');
+  const [condicionDefaultLabel, setCondicionDefaultLabel] = useState('Selecciona una Condición');
+  const [cicloDefaultLabel, setCicloDefaultLabel] = useState('Selecciona un Ciclo Lectivo');
 
   const userRole = localStorage.getItem('id_rol');
 
@@ -48,11 +49,11 @@ const AlumnosPrevias = ({ alumno }) => {
   }, [id_alumno, id_plan, id_curso, id_materia, id_condicion, id_ciclo, dummyState]);
 
   const resetDefaultLabels = () => {
-    setPlanDefaultLabel("Selecciona un Plan");
-    setCursoDefaultLabel("Selecciona un Curso");
-    setMateriaDefaultLabel("Selecciona una Materia");
-    setCondicionDefaultLabel("Selecciona una Condición");
-    setCicloDefaultLabel("Selecciona un Ciclo Lectivo");
+    setPlanDefaultLabel('Selecciona un Plan');
+    setCursoDefaultLabel('Selecciona un Curso');
+    setMateriaDefaultLabel('Selecciona una Materia');
+    setCondicionDefaultLabel('Selecciona una Condición');
+    setCicloDefaultLabel('Selecciona un Ciclo Lectivo');
   };
 
   const resetPreviaFields = () => {
@@ -85,7 +86,7 @@ const AlumnosPrevias = ({ alumno }) => {
       //console.log(previaData);
       setPrevia(previaData);
     } catch (error) {
-      console.error("Error al obtener las previas:", err);
+      console.error('Error al obtener las previas:', err);
     }
   };
 
@@ -94,7 +95,7 @@ const AlumnosPrevias = ({ alumno }) => {
       const cicloLectivoData = await fetchCicloLectivos();
       setcicloLectivo(cicloLectivoData);
     } catch (error) {
-      console.error("Error al obtener los ciclos lectivos:", err);
+      console.error('Error al obtener los ciclos lectivos:', err);
     }
   };
 
@@ -103,7 +104,7 @@ const AlumnosPrevias = ({ alumno }) => {
       const planData = await fetchPlan();
       setPlan(planData);
     } catch (error) {
-      console.error("Error al obtener los planes:", err);
+      console.error('Error al obtener los planes:', err);
     }
   };
 
@@ -112,7 +113,7 @@ const AlumnosPrevias = ({ alumno }) => {
       const cursosData = await fetchCurso(id_plan);
       setCurso(cursosData);
     } catch (error) {
-      console.error("Error al obtener los cursos:", err);
+      console.error('Error al obtener los cursos:', err);
     }
   };
 
@@ -121,7 +122,7 @@ const AlumnosPrevias = ({ alumno }) => {
       const materiaData = await fetchMateria(id_curso);
       setMateria(materiaData);
     } catch (error) {
-      console.error("Error al obtener las materias:", err);
+      console.error('Error al obtener las materias:', err);
     }
   };
 
@@ -130,12 +131,12 @@ const AlumnosPrevias = ({ alumno }) => {
       const condicionData = await fetchCondicion();
       setCondicion(condicionData);
     } catch (error) {
-      console.error("Error al obtener la condicion:", err);
+      console.error('Error al obtener la condicion:', err);
     }
   };
 
   const handleEditPrevia = (previa) => {
-    console.log("Editar previa", previa.id_previa);
+    console.log('Editar previa', previa.id_previa);
     setid_previa(previa.id_previa);
     setid_plan(previa.id_plan);
     setid_curso(previa.id_curso);
@@ -159,55 +160,55 @@ const AlumnosPrevias = ({ alumno }) => {
     };
 
     const url = id_previa ? `${API_URL}/previa/actualizar/${id_previa}` : `${API_URL}/previa/nuevo`;
-    const method = id_previa ? "put" : "post";
+    const method = id_previa ? 'put' : 'post';
 
     axios[method](url, Previa, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
     })
       .then((response) => {
-        Swal.fire("Datos actualizados", "Datos almacenados con éxito", "success");
+        Swal.fire('Datos actualizados', 'Datos almacenados con éxito', 'success');
         resetPreviaFields();
         handleAgregarPrevia();
         setDummyState(!dummyState);
       })
       .catch((error) => {
         if (error.response && error.response.status === 400) {
-          Swal.fire("No se pudo guardar la previa", `${error.response.data.message}`, "info");
+          Swal.fire('No se pudo guardar la previa', `${error.response.data.message}`, 'info');
         } else if (error.response && error.response.status === 409) {
-          Swal.fire("No se pudo guardar la previa", `${error.response.data.message}`, "error");
+          Swal.fire('No se pudo guardar la previa', `${error.response.data.message}`, 'error');
         } else {
-          Swal.fire("Error", "Hubo un error al guardar la previa", "error");
+          Swal.fire('Error', 'Hubo un error al guardar la previa', 'error');
         }
       });
   };
 
   const handleDeletePrevia = (previa) => {
-    console.log("Eliminar previa", id_previa);
+    console.log('Eliminar previa', id_previa);
     Swal.fire({
-      title: "¿Estás seguro?",
+      title: '¿Estás seguro?',
       text: `¡Eliminarás ${previa.Materia.nombre} de ${previa.Curso.nombre}!`,
-      icon: "warning",
+      icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: "#dc2626",
-      cancelButtonColor: "#1e40af",
-      confirmButtonText: "¡Sí, elimínalo!",
+      confirmButtonColor: '#dc2626',
+      cancelButtonColor: '#1e40af',
+      confirmButtonText: '¡Sí, elimínalo!',
     }).then((result) => {
       if (result.isConfirmed) {
         axios
           .delete(`${API_URL}/previa/eliminar/${previa.id_previa}`, {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
           })
           .then((response) => {
-            Swal.fire("¡Eliminado!", "La previa ha sido eliminada.", "success");
+            Swal.fire('¡Eliminado!', 'La previa ha sido eliminada.', 'success');
             setPrevia((previas) => previas.filter((previa) => previa.id_previa !== id_previa));
             setDummyState(!dummyState);
           })
           .catch((error) => {
-            Swal.fire("Error", "Hubo un error al eliminar la previa", "error");
+            Swal.fire('Error', 'Hubo un error al eliminar la previa', 'error');
           });
       }
     });
@@ -215,23 +216,26 @@ const AlumnosPrevias = ({ alumno }) => {
 
   return (
     <div>
-      <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
+      <div className='bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6'>
         <form onSubmit={handleGuardarPrevia}>
-          <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
+          <h1 className='bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2'>
             Previas
           </h1>
           <div hidden={isDisabledPrevias}>
-            <div className="relative mt-4 mb-6">
+            <div className='relative mt-4 mb-6'>
               <select
                 onChange={(e) => setid_plan(e.target.value)}
-                value={id_plan || ""}
-                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                value={id_plan || ''}
+                className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
               >
-                <option value="">Selecciona un Plan</option>
+                <option value=''>Selecciona un Plan</option>
                 {plan
                   .sort((a, b) => b.id_plan - a.id_plan)
                   .map((plan) => (
-                    <option key={plan.id_plan} value={plan.id_plan}>
+                    <option
+                      key={plan.id_plan}
+                      value={plan.id_plan}
+                    >
                       {plan.codigo} - {plan.descripcion}
                     </option>
                   ))}
@@ -239,12 +243,15 @@ const AlumnosPrevias = ({ alumno }) => {
 
               <select
                 onChange={(e) => setid_curso(e.target.value)}
-                value={id_curso || ""}
-                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                value={id_curso || ''}
+                className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
               >
-                <option value="">Selecciona un Curso</option>
+                <option value=''>Selecciona un Curso</option>
                 {curso.map((curso) => (
-                  <option key={curso.id_curso} value={curso.id_curso}>
+                  <option
+                    key={curso.id_curso}
+                    value={curso.id_curso}
+                  >
                     {curso.nombre}
                   </option>
                 ))}
@@ -252,12 +259,15 @@ const AlumnosPrevias = ({ alumno }) => {
 
               <select
                 onChange={(e) => setid_materia(e.target.value)}
-                value={id_materia || ""}
-                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                value={id_materia || ''}
+                className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
               >
-                <option value="">Selecciona una Materia</option>
+                <option value=''>Selecciona una Materia</option>
                 {materia.map((materia) => (
-                  <option key={materia.id_materia} value={materia.id_materia}>
+                  <option
+                    key={materia.id_materia}
+                    value={materia.id_materia}
+                  >
                     {materia.nombre}
                   </option>
                 ))}
@@ -265,12 +275,15 @@ const AlumnosPrevias = ({ alumno }) => {
 
               <select
                 onChange={(e) => setid_condicion(e.target.value)}
-                value={id_condicion || ""}
-                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                value={id_condicion || ''}
+                className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
               >
-                <option value="">Selecciona una Condición</option>
+                <option value=''>Selecciona una Condición</option>
                 {condicion.map((condicion) => (
-                  <option key={condicion.id_condicion} value={condicion.id_condicion}>
+                  <option
+                    key={condicion.id_condicion}
+                    value={condicion.id_condicion}
+                  >
                     {condicion.nombre}
                   </option>
                 ))}
@@ -278,14 +291,17 @@ const AlumnosPrevias = ({ alumno }) => {
 
               <select
                 onChange={(e) => setid_ciclo(e.target.value)}
-                value={id_ciclo || ""}
-                className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+                value={id_ciclo || ''}
+                className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
               >
-                <option value="">Selecciona un Ciclo Lectivo</option>
+                <option value=''>Selecciona un Ciclo Lectivo</option>
                 {cicloLectivo
                   .sort((a, b) => b.id_ciclo - a.id_ciclo)
                   .map((cicloLectivo) => (
-                    <option key={cicloLectivo.id_ciclo} value={cicloLectivo.id_ciclo}>
+                    <option
+                      key={cicloLectivo.id_ciclo}
+                      value={cicloLectivo.id_ciclo}
+                    >
                       {cicloLectivo.anio}
                     </option>
                   ))}
@@ -293,16 +309,16 @@ const AlumnosPrevias = ({ alumno }) => {
             </div>
           </div>
           <div hidden={!isDisabledPrevias}>
-            <div className="relative mt-4 mb-6">
+            <div className='relative mt-4 mb-6'>
               {/* Lista de previas */}
-              <table className="min-w-full py-1 px-0 text-sm text-secondary bg-transparent border-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer">
+              <table className='min-w-full py-1 px-0 text-sm text-secondary bg-transparent border-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'>
                 <thead>
                   <tr>
-                    <th className="text-center border-2 border-primary">Curso</th>
-                    <th className="text-center border-2 border-primary">Materia</th>
-                    <th className="text-center border-2 border-primary">Condición</th>
-                    <th className="text-center border-2 border-primary">Ciclo Lectivo</th>
-                    <th className="text-center border-2 border-primary">Acciones</th>
+                    <th className='text-center border-2 border-primary'>Curso</th>
+                    <th className='text-center border-2 border-primary'>Materia</th>
+                    <th className='text-center border-2 border-primary'>Condición</th>
+                    <th className='text-center border-2 border-primary'>Ciclo Lectivo</th>
+                    <th className='text-center border-2 border-primary'>Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -310,39 +326,39 @@ const AlumnosPrevias = ({ alumno }) => {
                     <tr
                       key={previa.id_previa}
                       className={`${
-                        previa.Calificacion.aprobado ? "text-success" : "text-secondary"
+                        previa.Calificacion.aprobado ? 'text-success' : 'text-secondary'
                       }`}
                     >
-                      <td className="text-center border-dotted border-2 border-primary">
+                      <td className='text-center border-dotted border-2 border-primary'>
                         {previa.Curso.nombre}
                       </td>
                       <td className={`text-center border-dotted border-2 border-primary`}>
                         {previa.Materia.nombre}
-                        {previa.Calificacion.aprobado ? " - APROBADO" : ""}
+                        {previa.Calificacion.aprobado ? ' - APROBADO' : ''}
                       </td>
-                      <td className="text-center border-dotted border-2 border-primary">
+                      <td className='text-center border-dotted border-2 border-primary'>
                         {previa.Condicion.nombre}
                       </td>
-                      <td className="text-center border-dotted border-2 border-primary">
+                      <td className='text-center border-dotted border-2 border-primary'>
                         {previa.CicloLectivo.anio}
                       </td>
-                      <td className="text-center border-dotted border-2 border-primary">
-                      {/* Condicionar la visibilidad según el rol */}
+                      <td className='text-center border-dotted border-2 border-primary'>
+                        {/* Condicionar la visibilidad según el rol */}
                         {userRole < 4 ? (
-                          <div className="flex justify-center">
+                          <div className='flex justify-center'>
                             {/* <CiEdit
                               className="text-xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
                               onClick={() => handleEditPrevia(previa)}
                               title="Editar Previa"
                             /> */}
-                            <div className="relative group">
+                            <div className='relative group'>
                               <CiEdit
-                                className="text-xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300"
+                                className='text-xl mx-3 hover:text-warning hover:cursor-pointer hover:scale-125 ease-in duration-300'
                                 onClick={() => handleEditPrevia(previa)}
                               />
-                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-warning bg-opacity-80 rounded">
+                              <div className='absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-warning bg-opacity-80 rounded'>
                                 Editar Previa
-                                <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-warning bg-opacity-80"></div>
+                                <div className='w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-warning bg-opacity-80'></div>
                               </div>
                             </div>
                             {/* <CiTrash
@@ -351,16 +367,16 @@ const AlumnosPrevias = ({ alumno }) => {
                               title="Eliminar Previa"
                             /> */}
                             {userRole <= 1 ? (
-                            <div className="relative group">
-                              <CiTrash
-                                className="text-xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300"
-                                onClick={() => handleDeletePrevia(previa)}
-                              />
-                              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-danger bg-opacity-80 rounded">
-                                Eliminar Previa
-                                <div className="w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-danger bg-opacity-80"></div>
+                              <div className='relative group'>
+                                <CiTrash
+                                  className='text-xl mx-3 hover:text-danger hover:cursor-pointer hover:scale-125 ease-in duration-300'
+                                  onClick={() => handleDeletePrevia(previa)}
+                                />
+                                <div className='absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-danger bg-opacity-80 rounded'>
+                                  Eliminar Previa
+                                  <div className='w-3 h-3 absolute left-1/2 transform -translate-x-1/2 bottom-[-6px] rotate-45 bg-danger bg-opacity-80'></div>
+                                </div>
                               </div>
-                            </div>
                             ) : null}
                             <AlumnosInscripcion previa={previa} />
                           </div>
@@ -372,30 +388,30 @@ const AlumnosPrevias = ({ alumno }) => {
               </table>
             </div>
           </div>
-          <div className="flex justify-between">
+          <div className='flex justify-between'>
             <div>
               <button
-                type="button"
+                type='button'
                 onClick={() => handleAgregarPrevia()}
                 className={`text-xs sm:text-sm lg:text-base z-10 border  p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r ease-in duration-300 ${
                   isDisabledPrevias
-                    ? "border-info from-info to-primary"
-                    : "border-warning from-warning to-yellow-500"
+                    ? 'border-info from-info to-primary'
+                    : 'border-warning from-warning to-yellow-500'
                 }`}
               >
-                {isDisabledPrevias ? "Agregar" : "Cancelar"}
+                {isDisabledPrevias ? 'Agregar' : 'Cancelar'}
               </button>
               <button
-                type="submit"
-                className="ml-5 text-xs sm:text-sm lg:text-base z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-500 ease-in duration-300"
+                type='submit'
+                className='ml-5 text-xs sm:text-sm lg:text-base z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-500 ease-in duration-300'
                 hidden={isDisabledPrevias}
               >
                 Guardar
               </button>
               <button
-                type="button"
-                onClick={() => navigate("/alumnos")}
-                className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
+                type='button'
+                onClick={() => navigate('/alumnos')}
+                className='ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300'
                 hidden={!isDisabledPrevias}
               >
                 Volver
@@ -403,9 +419,9 @@ const AlumnosPrevias = ({ alumno }) => {
             </div>
             <div>
               <button
-                type="button"
-                onClick={() => navigate("/alumnos/rac/" + id_alumno)}
-                className="text-xs sm:text-sm lg:text-base z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-800 ease-in duration-300"
+                type='button'
+                onClick={() => navigate('/alumnos/rac/' + id_alumno)}
+                className='text-xs sm:text-sm lg:text-base z-10 border border-success p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-success to-green-800 ease-in duration-300'
               >
                 RAC
               </button>

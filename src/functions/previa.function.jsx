@@ -17,7 +17,7 @@ export const fetchData = async (endpoint) => {
     throw err;
   }
 };
-
+export const fetchDivision = () => fetchData('/division/lista');
 export const fetchCurso = (id_plan) => fetchData(`/curso/filtrar/id_plan/${id_plan}`);
 export const fetchCursoByCicloLectivo = (id_ciclo) =>
   fetchData(`/inscripcion/filtrar/id_ciclo/${id_ciclo}`);
@@ -83,3 +83,6 @@ export const fetchActaExamen = async (id_turno, id_condicion, id_materia) => {
     throw err;
   }
 };
+
+export const fetchAlumnoCurso = (id_alumno) =>
+  fetchData(`/inscripcioncurso/filtrar/id_alumno/${id_alumno}`);
