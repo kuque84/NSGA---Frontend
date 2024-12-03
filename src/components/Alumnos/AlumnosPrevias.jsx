@@ -83,7 +83,8 @@ const AlumnosPrevias = ({ alumno }) => {
     try {
       if (!id_alumno) return;
       const previaData = await fetchPrevias(id_alumno);
-      //console.log(previaData);
+      //console.log('previaData:');
+      //console.table(previaData);
       setPrevia(previaData);
     } catch (error) {
       console.error('Error al obtener las previas:', err);
@@ -136,7 +137,7 @@ const AlumnosPrevias = ({ alumno }) => {
   };
 
   const handleEditPrevia = (previa) => {
-    console.log('Editar previa', previa.id_previa);
+    //console.log('Editar previa', previa.id_previa);
     setid_previa(previa.id_previa);
     setid_plan(previa.id_plan);
     setid_curso(previa.id_curso);

@@ -52,12 +52,15 @@ const ActaExamen = ({ examen, actadeexamen }) => {
       id_calificacion: id_calificacion[index],
     }));
 
+    const id_condicion = actadeexamen[1];
+
     const acta = {
       inscripcion: inscripcion,
       libro: libro,
       folio: folio,
       fecha: fecha,
       previa: previa,
+      id_condicion: id_condicion,
     };
 
     console.log('Acta: ');

@@ -48,10 +48,10 @@ export const fetchMateriaByCicloTurnoCondicionAndCurso = (
 export const fetchTurnoByInscripcion = (id_ciclo) =>
   fetchData(`/turnoexamen/filtrar/id_ciclo/${id_ciclo}`);
 
-export const fetchFechaExamenInscripcion = async (id_materia, id_turno) => {
+export const fetchFechaExamenInscripcion = async (id_materia, id_turno, id_condicion) => {
   try {
     const response = await axios.get(
-      `${API_URL}/fechaexamen/filtrar/inscripcion/${id_turno}/${id_materia}`,
+      `${API_URL}/fechaexamen/filtrar/inscripcion/${id_turno}/${id_materia}/${id_condicion}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
