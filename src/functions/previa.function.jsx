@@ -31,6 +31,8 @@ export const fetchInscripcion = (id_turno) =>
   fetchData('/inscripcion/filtrar/id_turno/' + id_turno);
 export const fetchCalificacion = () => fetchData('/calificacion/lista');
 export const fetchRac = (id_alumno) => fetchData(`/inscripcion/rac/${id_alumno}`);
+export const fetchCursoByCicloLectivoOnInscripcionCurso = (id_ciclo) =>
+  fetchData(`/inscripcioncurso/cursos/${id_ciclo}`);
 
 export const fetchCicloByTurno = () => fetchData('/actaexamen/ciclo');
 export const fetchTurnoByCiclo = (id_ciclo) => fetchData(`/actaexamen/turno/id_ciclo/${id_ciclo}`);
