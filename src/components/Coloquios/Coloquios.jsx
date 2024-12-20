@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import {
   fetchCicloByTurno,
   fetchCursoByCicloLectivoOnInscripcionCurso,
+  fetchDivision,
+  fetchMateria,
   fetchMateriaByCicloTurnoCondicionAndCurso,
   fetchTurnoByCiclo,
   fetchActaExamen,
 } from '../../functions/previa.function';
 import Swal from 'sweetalert2';
-import ActaExamen from './ActaColoquio';
+import ActaColoquio from './ActaColoquio';
 
 const Coloquios = () => {
   const [coloquio, setColoquio] = useState([]);
@@ -62,14 +64,22 @@ const Coloquios = () => {
   }, [id_ciclo]);
 
   useEffect(() => {
+    const loadDivision = async () => {
+      if (id_curso) {
+        const divisionData = await fetchDivision();
+        //console.log('Division:', divisionData);
+        //console.log('cicloLectivo:', cicloLectivo);
+        //console.log('Anio en division:', anio);
+        setDivision(divisionData);
+      }
+    };
+    loadDivision();
+  }, [id_curso]);
+
+  useEffect(() => {
     const loadMateria = async () => {
-      if ((id_ciclo, id_turno, id_condicion, id_curso)) {
-        const materiaData = await fetchMateriaByCicloTurnoCondicionAndCurso(
-          id_ciclo,
-          id_turno,
-          id_condicion,
-          id_curso
-        );
+      if (id_curso) {
+        const materiaData = await fetchMateria(id_curso);
         //console.log('Materia:', materiaData);
         //console.log('cicloLectivo:', cicloLectivo);
 
@@ -121,21 +131,42 @@ const Coloquios = () => {
     }
   };
 
-  const handleCicloChange = async (e) => {
-    const newIdCiclo = e.target.value;
-    setIdCiclo(newIdCiclo);
-    //console.log('Ciclo seleccionado:', newIdCiclo);
-    //console.log('Ciclo:', cicloLectivo);
+  const handleInscribir = async (e) => {
+    console.log('Inscribir');
+    console.log('id_curso:', id_curso);
+    console.log('id_division:', id_division);
+    console.log('id_materia:', id_materia);
+    console.log('id_turno:', id_turno);
+    console.log('id_condicion:', id_condicion);
+    console.log('anio:', anio);
+    console.log('id_plan:', id_plan);
+    console.log('id_ciclo:', id_ciclo);
 
-    const selectedCiclo = cicloLectivo.find((ciclo) => ciclo.id_ciclo === newIdCiclo);
-    if (selectedCiclo) {
-      setAnio(selectedCiclo.anio);
-      //console.log('Año:', selectedCiclo.anio);
-    } else {
-      console.error('No se encontró el ciclo con id:', newIdCiclo);
+    try {
+      const data = await fetchMateriaByCicloTurnoCondicionAndCurso(
+        id_ciclo,
+        id_turno,
+        id_condicion,
+        id_curso
+      );
+      console.log('Datos de materia:', data);
+      if (data.length === 0) {
+        console.log('No se encontraron datos de materia');
+        Swal.fire({
+          icon: 'info',
+          title: 'Materia vacía',
+          text: 'No se encontraron materias para inscribir en el examen seleccionado.',
+        });
+        return;
+      }
+      setColoquio(data);
+    } catch (err) {
+      console.error('Error al obtener la materia:', err);
     }
+    console.log('Coloquio:', coloquio);
   };
 
+  /*
   useEffect(() => {
     if (id_ciclo) {
       //console.log('Buscando ciclo con id:', id_ciclo);
@@ -151,7 +182,7 @@ const Coloquios = () => {
       }
     }
   }, [id_ciclo, cicloLectivo]);
-
+*/
   return (
     <div className='relative justify-start w-full max-w-7xl h-fit my-1 mx-4'>
       <div className='bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6'>
@@ -170,7 +201,7 @@ const Coloquios = () => {
                 key={curso.id_curso}
                 value={curso.id_curso}
               >
-                {curso.nombre} - {curso.codigo}
+                {curso.Curso.nombre}
               </option>
             ))}
           </select>
@@ -222,18 +253,24 @@ const Coloquios = () => {
               </option>
             ))}
           </select>
-
+          <button
+            type='button'
+            onClick={() => handleInscribir()}
+            className='print:hidden ml-5 text-xs sm:text-sm lg:text-base z-10 border border-info p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-info to-blue-500 ease-in duration-300'
+          >
+            Inscribir
+          </button>
           <button
             type='button'
             onClick={() => handleFiltrar()}
             className='print:hidden ml-5 text-xs sm:text-sm lg:text-base z-10 border border-info p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-info to-blue-500 ease-in duration-300'
           >
-            Filtrar
+            Acta
           </button>
         </div>
       </div>
       {examen.length > 0 && (
-        <ActaExamen
+        <ActaColoquio
           examen={examen}
           actadeexamen={actadeexamen}
         />

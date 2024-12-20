@@ -186,6 +186,7 @@ const AlumnosRac = () => {
             <thead>
               <tr>
                 <th className='text-center border-2 border-primary'>Nombre de la Materia</th>
+                <th className='text-center border-2 border-primary'>Curso</th>
                 <th className='text-center border-2 border-primary'>Condición</th>
               </tr>
             </thead>
@@ -194,6 +195,9 @@ const AlumnosRac = () => {
                 <tr key={materia.id_previa}>
                   <td className='text-center border-dotted border-2 border-primary'>
                     {materia.Materia.nombre}
+                  </td>
+                  <td className='text-center border-dotted border-2 border-primary'>
+                    {materia.Curso.nombre}
                   </td>
                   <td className='text-center border-dotted border-2 border-primary'>
                     {materia.Condicion.nombre}
