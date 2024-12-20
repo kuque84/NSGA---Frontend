@@ -90,7 +90,7 @@ const AlumnosRac = () => {
           Registro Anual de Calificaciones
         </h1>
         <h2 className='bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-lg sm:text-2xl lg:text-3xl text-center tracking-wide py-2'>
-          Anexo - Examenes Previos y Equivalencias
+          Anexo - Exámenes Previos y Equivalencias
         </h2>
         <div className='m-3 flex justify-between items-center'>
           <div className='w-72 flex flex-col items-start flex-shrink-0 border-0 border-b-2 border-primary'>
