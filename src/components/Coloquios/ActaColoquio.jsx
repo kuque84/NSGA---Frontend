@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchCalificacion } from '../../functions/previa.function';
+import { fetchCalificacion, fetchDivisionById_division } from '../../functions/previa.function';
 import axios from 'axios';
 import settings from '../../Config/index';
 import Swal from 'sweetalert2';
@@ -8,6 +8,8 @@ import { downloadPDF } from '../../functions/downloadPDF';
 const API_URL = settings.API_URL;
 
 const ActaColoquio = ({ examen, actadeexamen }) => {
+  console.log('ActaColoquio:');
+  console.table(actadeexamen);
   const [calificacion, setCalificacion] = useState([]);
   const [id_calificacion, setid_calificacion] = useState(
     examen.map((e) => e.id_calificacion || '')
@@ -97,11 +99,18 @@ const ActaColoquio = ({ examen, actadeexamen }) => {
       });
   };
 
-  const handleDownload = () => {
+  const handleDownload = async () => {
     const id_turno = actadeexamen[0];
     const id_condicion = actadeexamen[1];
     const id_materia = actadeexamen[2];
     const anio = actadeexamen[3];
+    const id_curso = actadeexamen[4];
+    const id_division = actadeexamen[5];
+    const id_ciclo = actadeexamen[6];
+
+    const division = await fetchDivisionById_division(id_division);
+    console.log('Division:', division[0]);
+
     /*
     console.log('id_turno:', id_turno);
     console.log('id_condicion:', id_condicion);
@@ -114,6 +123,8 @@ const ActaColoquio = ({ examen, actadeexamen }) => {
       ' - ',
       examen[0].Previa.Curso.nombre,
       ' - ',
+      division[0].nombre,
+      ' - ',
       examen[0].Previa.Materia.nombre,
       ' - ',
       examen[0].Previa.Plan.codigo,
@@ -123,17 +134,20 @@ const ActaColoquio = ({ examen, actadeexamen }) => {
     console.log(examen);
     //consultar en backend el nombre del id_turno, id_condicion, id_materia
 
-    const endpoint = `/acta/examen/pdf/${id_turno}/${id_condicion}/${id_materia}`; // Ajusta el endpoint según tu configuración backend]);
+    const endpoint = `/acta/Coloquio/pdf/${id_ciclo}/${id_curso}/${id_division}/${id_turno}/${id_condicion}/${id_materia}`; // Ajusta el endpoint según tu configuración backend]);
     //const endpoint = `/acta/examen/pdf`; // Ajusta el endpoint según tu configuración backend
     const filename =
+      'Acta - ' +
       examen[0].Previa.Condicion.nombre +
-      '-' +
+      ' - ' +
       examen[0].Previa.Curso.nombre +
-      '-' +
+      ' - ' +
+      division[0].nombre +
+      ' - ' +
       examen[0].Previa.Materia.nombre +
-      '-' +
+      ' - ' +
       examen[0].Previa.Plan.codigo +
-      '-' +
+      ' - ' +
       anio +
       '.pdf';
 

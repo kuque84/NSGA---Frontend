@@ -6,10 +6,13 @@ import {
   fetchMateria,
   fetchMateriaByCicloTurnoCondicionAndCurso,
   fetchTurnoByCiclo,
-  fetchActaExamen,
+  fetchActaColoquio,
+  fetchAlumnosporCurso,
 } from '../../functions/previa.function';
 import Swal from 'sweetalert2';
 import ActaColoquio from './ActaColoquio';
+import IncsribirColoquio from './InscribirColoquio';
+import { use } from 'react';
 
 const Coloquios = () => {
   const [coloquio, setColoquio] = useState([]);
@@ -39,6 +42,11 @@ const Coloquios = () => {
 
   const [division, setDivision] = useState([]);
   const [id_division, setIdDivision] = useState('');
+
+  const [cursoDivision, setCursoDivision] = useState(false);
+  const [alumnosPorCurso, setAlumnosPorCurso] = useState([]);
+
+  const [materiaTurno, setMateriaTurno] = useState(false);
 
   const loadSelects = async () => {
     const cicloLectivoData = await fetchCicloByTurno();
@@ -94,27 +102,73 @@ const Coloquios = () => {
     const loadTurno = async () => {
       if (id_ciclo) {
         const turnoData = await fetchTurnoByCiclo(id_ciclo);
-        //console.log('Turno:', turnoData);
-        //console.log('cicloLectivo:', cicloLectivo);
-
-        //console.log('Anio en turno:', anio);
-        setTurno(turnoData);
-        if (turnoData.length > 0) {
-          setIdTurno(turnoData[0].id_turno); // Selecciona automáticamente el primer turno disponible
+        // Filtrar los turnos para incluir solo "DICIEMBRE" y "FEBRERO"
+        const filteredTurnoData = turnoData.filter(
+          (turno) => turno.nombre === 'DICIEMBRE' || turno.nombre === 'FEBRERO'
+        );
+        setTurno(filteredTurnoData);
+        if (filteredTurnoData.length > 0) {
+          setIdTurno(filteredTurnoData[0].id_turno); // Selecciona automáticamente el primer turno disponible
         }
       }
     };
     loadTurno();
   }, [id_ciclo]);
 
+  useEffect(() => {
+    if (id_curso && id_division) {
+      setCursoDivision(true);
+      handleAlumnosPorCurso();
+    } else {
+      setCursoDivision(false);
+    }
+    setExamen([]);
+  }, [id_curso, id_division]);
+
+  useEffect(() => {
+    setExamen([]);
+  }, [id_turno, id_materia]);
+
+  useEffect(() => {
+    handleAlumnosPorCurso();
+  }, [cursoDivision]);
+
+  const handleAlumnosPorCurso = async () => {
+    try {
+      if (cursoDivision) {
+        console.log('Cargar alumos del curso y division');
+        console.log('Ciclo:', id_ciclo);
+        console.log('Curso:', id_curso);
+        console.log('Division:', id_division);
+        //LLAMAR A LA FUNCION QUE TRAE LOS ALUMNOS DEL CURSO Y DIVISION
+        const loadAlumnos = async () => {
+          const alumnosData = await fetchAlumnosporCurso(id_ciclo, id_curso, id_division);
+          console.log('Alumnos:', alumnosData);
+          setAlumnosPorCurso(alumnosData);
+          console.table(alumnosPorCurso);
+        };
+        loadAlumnos();
+      }
+    } catch (err) {
+      console.error('Error al obtener los alumnos:', err);
+    }
+  };
+
   const handleFiltrar = async () => {
     setExamen([]);
-    setActaDeExamen([id_turno, id_condicion, id_materia, anio]);
+    setActaDeExamen([id_turno, id_condicion, id_materia, anio, id_curso, id_division, id_ciclo]);
     //console.log('cicloLectivo:', cicloLectivo);
 
     console.log('Año en filtrar:', anio);
     try {
-      const data = await fetchActaExamen(id_turno, id_condicion, id_materia);
+      const data = await fetchActaColoquio(
+        id_ciclo,
+        id_curso,
+        id_division,
+        id_turno,
+        id_condicion,
+        id_materia
+      );
       //console.log('Datos de acta de examen:', data);
       if (data.length === 0) {
         //console.log('No se encontraron datos del acta de examen');
@@ -166,23 +220,6 @@ const Coloquios = () => {
     console.log('Coloquio:', coloquio);
   };
 
-  /*
-  useEffect(() => {
-    if (id_ciclo) {
-      //console.log('Buscando ciclo con id:', id_ciclo);
-      const selectedCiclo = cicloLectivo.find((ciclo) => {
-        //console.log('Comparando:', String(ciclo.id_ciclo), 'con', String(id_ciclo));
-        return String(ciclo.id_ciclo) === String(id_ciclo);
-      });
-      if (selectedCiclo) {
-        setAnio(selectedCiclo.anio);
-        //console.log('Año del ciclo seleccionado:', selectedCiclo.anio);
-      } else {
-        console.error('No se encontró el ciclo con id:', id_ciclo);
-      }
-    }
-  }, [id_ciclo, cicloLectivo]);
-*/
   return (
     <div className='relative justify-start w-full max-w-7xl h-fit my-1 mx-4'>
       <div className='bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6'>
@@ -253,6 +290,14 @@ const Coloquios = () => {
               </option>
             ))}
           </select>
+          <IncsribirColoquio
+            alumnosPorCurso={alumnosPorCurso}
+            id_materia={id_materia}
+            id_turno={id_turno}
+            id_ciclo={id_ciclo}
+            id_curso={id_curso}
+            id_division={id_division}
+          />
           <button
             type='button'
             onClick={() => handleInscribir()}
