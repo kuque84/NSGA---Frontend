@@ -5,32 +5,32 @@ import settings from "../../Config/index";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const CicloLectivoInfo = () => {
-  const [cicloLectivo, setCicloLectivo] = useState({});
-  const [anio, setAnio] = useState("");
+const DivisionInfo = () => {
+  const [divisiones, setDivisiones] = useState({});
+  const [nombre, setAnio] = useState("");
   const API_URL = settings.API_URL;
   const navigate = useNavigate();
-  const { id_ciclo } = useParams();
+  const { id_division } = useParams();
   const [isDisabled, setIsDisabled] = useState(true);
   console.log(useParams());
 
   useEffect(() => {
-    if (id_ciclo) {
+    if (id_division) {
       axios
-        .get(`${API_URL}/ciclolectivo/filtrar/id_ciclo/${id_ciclo}`, {
+        .get(`${API_URL}/division/filtrar/id_division/${id_division}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         })
         .then((response) => {
-          const cicloLectivo = response.data[0];
-          setAnio(cicloLectivo.anio);
+          const divisiones = response.data[0];
+          setAnio(divisiones.nombre);
         })
         .catch((error) => {
-          console.error("Error al obtener el ciclo lectivo:", error);
+          console.error("Error al obtener el division lectivo:", error);
           Swal.fire(
             "Error",
-            "Hubo un error al obtener los datos del ciclo lectivo",
+            "Hubo un error al obtener los datos del division lectivo",
             "error"
           );
         });
@@ -38,16 +38,16 @@ const CicloLectivoInfo = () => {
   }, []);
 
   useEffect(() => {
-    setCicloLectivo({
-      anio: anio,
+    setDivisiones({
+      nombre: nombre,
     });
-  }, [anio]);
+  }, [nombre]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setCicloLectivo({ anio });
+    setDivisiones({ nombre });
     axios
-      .put(`${API_URL}/ciclolectivo/actualizar/${id_ciclo}`, cicloLectivo, {
+      .put(`${API_URL}/division/actualizar/${id_division}`, divisiones, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -63,14 +63,14 @@ const CicloLectivoInfo = () => {
       .catch((error) => {
         if (error.response && error.response.status === 409) {
           Swal.fire(
-            "No se pudo editar el ciclo lectivo",
+            "No se pudo editar el division lectivo",
             `${error.response.data.message}`,
             "warning"
           );
         } else {
           Swal.fire(
             "Error",
-            "Hubo un error al editar el ciclo lectivo",
+            "Hubo un error al editar el division lectivo",
             "error"
           );
         }
@@ -94,7 +94,7 @@ const CicloLectivoInfo = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${API_URL}/cicloLectivo/eliminar/${id_ciclo}`, {
+          .delete(`${API_URL}/division/eliminar/${id_division}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -102,15 +102,15 @@ const CicloLectivoInfo = () => {
           .then((response) => {
             Swal.fire(
               "¡Eliminado!",
-              "El ciclo lectivo ha sido eliminado.",
+              "El division lectivo ha sido eliminado.",
               "success"
             );
-            navigate("/ciclolectivo");
+            navigate("/divisiones");
           })
           .catch((error) => {
             Swal.fire(
               "Error",
-              "Hubo un error al eliminar el ciclo lectivo",
+              "Hubo un error al eliminar el division lectivo",
               "error"
             );
           });
@@ -122,28 +122,28 @@ const CicloLectivoInfo = () => {
     <div className="w-full h-fit relative my-1 mx-4">
       <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
         <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
-          Datos del Ciclo Lectivo
+          Datos de la División
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="relative mt-4 mb-6">
             <input
-              id="anio"
+              id="nombre"
               className="block py-0 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
-              value={anio}
-              type="number"
+              value={nombre}
+              type="text"
               autoComplete="off"
-              name="anio"
+              name="nombre"
               onChange={(e) => setAnio(e.target.value.toUpperCase())}
               required
               disabled={isDisabled}
             />
             <label
-              htmlFor="anio"
+              htmlFor="nombre"
               className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${
-                anio ? "-translate-y-6 scale-75" : "-translate-y-1 scale-100"
+                nombre ? "-translate-y-6 scale-75" : "-translate-y-1 scale-100"
               } top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
             >
-              Año:
+              División:
             </label>
           </div>
           <div className="flex justify-between">
@@ -168,7 +168,7 @@ const CicloLectivoInfo = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/ciclolectivo")}
+                onClick={() => navigate("/divisiones")}
                 className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
                 hidden={!isDisabled}
               >
@@ -181,7 +181,7 @@ const CicloLectivoInfo = () => {
               className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
               hidden={isDisabled}
             >
-              Eliminar Ciclo Lectivo
+              Eliminar División
             </button>
           </div>
         </form>
@@ -190,4 +190,4 @@ const CicloLectivoInfo = () => {
   );
 };
 
-export default CicloLectivoInfo;
+export default DivisionInfo;

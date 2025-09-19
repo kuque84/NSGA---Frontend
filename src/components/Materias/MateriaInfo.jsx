@@ -5,26 +5,25 @@ import settings from "../../Config/index";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const CicloLectivoInfo = () => {
-  const [cicloLectivo, setCicloLectivo] = useState({});
-  const [anio, setAnio] = useState("");
+const MateriaInfo = () => {
+  const [materia, setMateria] = useState({});
+  const [nombre, setNombre] = useState("");
   const API_URL = settings.API_URL;
   const navigate = useNavigate();
-  const { id_ciclo } = useParams();
+  const { id_materia } = useParams();
   const [isDisabled, setIsDisabled] = useState(true);
-  console.log(useParams());
 
   useEffect(() => {
-    if (id_ciclo) {
+    if (id_materia) {
       axios
-        .get(`${API_URL}/ciclolectivo/filtrar/id_ciclo/${id_ciclo}`, {
+        .get(`${API_URL}/materia/filtrar/id_materia/${id_materia}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         })
         .then((response) => {
-          const cicloLectivo = response.data[0];
-          setAnio(cicloLectivo.anio);
+          //const materia = response.data[0];
+          setMateria(response.data[0]);
         })
         .catch((error) => {
           console.error("Error al obtener el ciclo lectivo:", error);
@@ -38,16 +37,16 @@ const CicloLectivoInfo = () => {
   }, []);
 
   useEffect(() => {
-    setCicloLectivo({
-      anio: anio,
-    });
-  }, [anio]);
+    if (materia?.nombre) {
+      setNombre(materia.nombre);
+    }
+  }, [materia]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setCicloLectivo({ anio });
+    setMateria({ nombre });
     axios
-      .put(`${API_URL}/ciclolectivo/actualizar/${id_ciclo}`, cicloLectivo, {
+      .put(`${API_URL}/materia/actualizar/${id_materia}`, materia, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -94,7 +93,7 @@ const CicloLectivoInfo = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${API_URL}/cicloLectivo/eliminar/${id_ciclo}`, {
+          .delete(`${API_URL}/materia/eliminar/${id_materia}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
@@ -105,7 +104,7 @@ const CicloLectivoInfo = () => {
               "El ciclo lectivo ha sido eliminado.",
               "success"
             );
-            navigate("/ciclolectivo");
+            navigate("/materias");
           })
           .catch((error) => {
             Swal.fire(
@@ -122,28 +121,48 @@ const CicloLectivoInfo = () => {
     <div className="w-full h-fit relative my-1 mx-4">
       <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
         <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
-          Datos del Ciclo Lectivo
+          Datos de las Materias
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="relative mt-4 mb-6">
             <input
-              id="anio"
+              id="nombre"
               className="block py-0 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
-              value={anio}
-              type="number"
+              value={nombre}
+              type="text"
               autoComplete="off"
-              name="anio"
-              onChange={(e) => setAnio(e.target.value.toUpperCase())}
+              name="nombre"
+              onChange={(e) => setNombre(e.target.value.toUpperCase())}
               required
               disabled={isDisabled}
             />
             <label
-              htmlFor="anio"
+              htmlFor="nombre"
               className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${
-                anio ? "-translate-y-6 scale-75" : "-translate-y-1 scale-100"
+                nombre ? "-translate-y-6 scale-75" : "-translate-y-1 scale-100"
               } top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
             >
-              Año:
+              Materia:
+            </label>
+          </div>
+          <div className="relative mt-4 mb-6">
+            <input
+              id="datos"
+              className="block py-0 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+              value={`${materia.nombre} - Curso: ${materia.Curso?.nombre} - Plan: ${materia.Curso?.Plan?.codigo} "${materia.Curso?.Plan?.descripcion}"`}
+              type="text"
+              autoComplete="off"
+              name="datos"
+              required
+              disabled={true}
+            />
+            <label
+              htmlFor="Datos"
+              className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${
+                nombre ? "-translate-y-6 scale-75" : "-translate-y-1 scale-100"
+              } top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
+            >
+              Datos:
             </label>
           </div>
           <div className="flex justify-between">
@@ -168,7 +187,7 @@ const CicloLectivoInfo = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/ciclolectivo")}
+                onClick={() => navigate("/materias")}
                 className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
                 hidden={!isDisabled}
               >
@@ -181,7 +200,7 @@ const CicloLectivoInfo = () => {
               className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
               hidden={isDisabled}
             >
-              Eliminar Ciclo Lectivo
+              Eliminar Materia
             </button>
           </div>
         </form>
@@ -190,4 +209,4 @@ const CicloLectivoInfo = () => {
   );
 };
 
-export default CicloLectivoInfo;
+export default MateriaInfo;

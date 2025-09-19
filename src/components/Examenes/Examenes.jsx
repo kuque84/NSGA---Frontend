@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   fetchCicloByTurno,
   fetchTurnoByCiclo,
@@ -6,29 +6,29 @@ import {
   fetchCursoByCicloTurnoAndCondicion,
   fetchMateriaByCicloTurnoCondicionAndCurso,
   fetchActaExamen,
-} from '../../functions/previa.function';
-import Swal from 'sweetalert2';
-import ActaExamen from './ActaExamen';
+} from "../../functions/previa.function";
+import Swal from "sweetalert2";
+import ActaExamen from "./ActaExamen";
 
 const Examenes = () => {
   const [examen, setExamen] = useState([]);
   const [actadeexamen, setActaDeExamen] = useState([]);
 
   const [cicloLectivo, setCicloLectivo] = useState([]);
-  const [id_ciclo, setIdCiclo] = useState('');
-  const [anio, setAnio] = useState('');
+  const [id_ciclo, setIdCiclo] = useState("");
+  const [anio, setAnio] = useState("");
 
   const [turno, setTurno] = useState([]);
-  const [id_turno, setIdTurno] = useState('');
+  const [id_turno, setIdTurno] = useState("");
 
   const [condicion, setCondicion] = useState([]);
-  const [id_condicion, setIdCondicion] = useState('');
+  const [id_condicion, setIdCondicion] = useState("");
 
   const [curso, setCurso] = useState([]);
-  const [id_curso, setIdCurso] = useState('');
+  const [id_curso, setIdCurso] = useState("");
 
   const [materia, setMateria] = useState([]);
-  const [id_materia, setIdMateria] = useState('');
+  const [id_materia, setIdMateria] = useState("");
 
   const loadSelects = async () => {
     const cicloLectivoData = await fetchCicloByTurno();
@@ -50,7 +50,7 @@ const Examenes = () => {
         //console.log('Anio en turno:', anio);
         setTurno(turnoData);
         if (turnoData.length > 0) {
-          setIdTurno(turnoData[0].id_turno); // Selecciona automáticamente el primer turno disponible
+          setIdTurno(turnoData[turnoData.length - 1].id_turno); // Selecciona automáticamente el último turno disponible
         }
       }
     };
@@ -60,7 +60,10 @@ const Examenes = () => {
   useEffect(() => {
     const loadCondicion = async () => {
       if ((id_turno, id_ciclo)) {
-        const condicionData = await fetchCondicionByTurnoAndCiclo(id_ciclo, id_turno);
+        const condicionData = await fetchCondicionByTurnoAndCiclo(
+          id_ciclo,
+          id_turno
+        );
         //console.log('Condición:', condicionData);
         //console.log('cicloLectivo:', cicloLectivo);
         //console.log('Anio en condicion:', anio);
@@ -112,22 +115,22 @@ const Examenes = () => {
     setActaDeExamen([id_turno, id_condicion, id_materia, anio]);
     //console.log('cicloLectivo:', cicloLectivo);
 
-    console.log('Año en filtrar:', anio);
+    console.log("Año en filtrar:", anio);
     try {
       const data = await fetchActaExamen(id_turno, id_condicion, id_materia);
       //console.log('Datos de acta de examen:', data);
       if (data.length === 0) {
         //console.log('No se encontraron datos del acta de examen');
         Swal.fire({
-          icon: 'info',
-          title: 'Acta de examen vacía',
-          text: 'No se encontraron alumnos inscriptos en el examen seleccionado.',
+          icon: "info",
+          title: "Acta de examen vacía",
+          text: "No se encontraron alumnos inscriptos en el examen seleccionado.",
         });
         return;
       }
       setExamen(data);
     } catch (err) {
-      console.error('Error al obtener la acta de examen:', err);
+      console.error("Error al obtener la acta de examen:", err);
     }
   };
 
@@ -137,12 +140,14 @@ const Examenes = () => {
     //console.log('Ciclo seleccionado:', newIdCiclo);
     //console.log('Ciclo:', cicloLectivo);
 
-    const selectedCiclo = cicloLectivo.find((ciclo) => ciclo.id_ciclo === newIdCiclo);
+    const selectedCiclo = cicloLectivo.find(
+      (ciclo) => ciclo.id_ciclo === newIdCiclo
+    );
     if (selectedCiclo) {
       setAnio(selectedCiclo.anio);
       //console.log('Año:', selectedCiclo.anio);
     } else {
-      console.error('No se encontró el ciclo con id:', newIdCiclo);
+      console.error("No se encontró el ciclo con id:", newIdCiclo);
     }
   };
 
@@ -157,29 +162,26 @@ const Examenes = () => {
         setAnio(selectedCiclo.anio);
         //console.log('Año del ciclo seleccionado:', selectedCiclo.anio);
       } else {
-        console.error('No se encontró el ciclo con id:', id_ciclo);
+        console.error("No se encontró el ciclo con id:", id_ciclo);
       }
     }
   }, [id_ciclo, cicloLectivo]);
 
   return (
-    <div className='relative justify-start w-full max-w-7xl h-fit my-1 mx-4'>
-      <div className='bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6'>
-        <h1 className='print:block bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2'>
+    <div className="relative justify-start w-full max-w-7xl h-fit my-1 mx-4">
+      <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
+        <h1 className="print:block bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
           Exámenes
         </h1>
-        <div className='relative mt-4 mb-6'>
+        <div className="relative mt-4 mb-6">
           <select
             onChange={handleCicloChange}
             value={id_ciclo}
-            className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
+            className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
           >
-            <option value=''>Selecciona un Ciclo Lectivo</option>
+            <option value="">Selecciona un Ciclo Lectivo</option>
             {cicloLectivo.map((ciclo) => (
-              <option
-                key={ciclo.id_ciclo}
-                value={ciclo.id_ciclo}
-              >
+              <option key={ciclo.id_ciclo} value={ciclo.id_ciclo}>
                 {ciclo.anio}
               </option>
             ))}
@@ -188,14 +190,11 @@ const Examenes = () => {
           <select
             onChange={(e) => setIdTurno(e.target.value)}
             value={id_turno}
-            className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
+            className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
           >
-            <option value=''>Selecciona un Turno de examen</option>
+            <option value="">Selecciona un Turno de examen</option>
             {turno.map((turno) => (
-              <option
-                key={turno.id_turno}
-                value={turno.id_turno}
-              >
+              <option key={turno.id_turno} value={turno.id_turno}>
                 {turno.nombre}
               </option>
             ))}
@@ -204,9 +203,9 @@ const Examenes = () => {
           <select
             onChange={(e) => setIdCondicion(e.target.value)}
             value={id_condicion}
-            className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
+            className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
           >
-            <option value=''>Selecciona una Condición</option>
+            <option value="">Selecciona una Condición</option>
             {condicion.map((condicion) => (
               <option
                 key={condicion.id_condicion}
@@ -220,14 +219,11 @@ const Examenes = () => {
           <select
             onChange={(e) => setIdCurso(e.target.value)}
             value={id_curso}
-            className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
+            className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
           >
-            <option value=''>Selecciona un Curso</option>
+            <option value="">Selecciona un Curso</option>
             {curso.map((curso) => (
-              <option
-                key={curso.id_curso}
-                value={curso.id_curso}
-              >
+              <option key={curso.id_curso} value={curso.id_curso}>
                 {curso.nombre} - {curso.codigo}
               </option>
             ))}
@@ -236,23 +232,20 @@ const Examenes = () => {
           <select
             onChange={(e) => setIdMateria(e.target.value)}
             value={id_materia}
-            className='block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer'
+            className="block py-1 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
           >
-            <option value=''>Selecciona una Materia</option>
+            <option value="">Selecciona una Materia</option>
             {materia.map((materia) => (
-              <option
-                key={materia.id_materia}
-                value={materia.id_materia}
-              >
+              <option key={materia.id_materia} value={materia.id_materia}>
                 {materia.nombre}
               </option>
             ))}
           </select>
 
           <button
-            type='button'
+            type="button"
             onClick={() => handleFiltrar()}
-            className='print:hidden ml-5 text-xs sm:text-sm lg:text-base z-10 border border-info p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-info to-blue-500 ease-in duration-300'
+            className="print:hidden ml-5 text-xs sm:text-sm lg:text-base z-10 border border-info p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-info to-blue-500 ease-in duration-300"
           >
             Filtrar
           </button>
@@ -262,6 +255,7 @@ const Examenes = () => {
         <ActaExamen
           examen={examen}
           actadeexamen={actadeexamen}
+          onEliminarInscripcion={handleFiltrar}
         />
       )}
     </div>

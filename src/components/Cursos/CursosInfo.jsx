@@ -5,54 +5,53 @@ import settings from "../../Config/index";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const CicloLectivoInfo = () => {
-  const [cicloLectivo, setCicloLectivo] = useState({});
-  const [anio, setAnio] = useState("");
+const CursoInfo = () => {
+  const [curso, setCurso] = useState({});
+  const [nombre, setNombre] = useState("");
+  const [plan, setPlan] = useState({});
   const API_URL = settings.API_URL;
   const navigate = useNavigate();
-  const { id_ciclo } = useParams();
+  const { id_curso } = useParams();
   const [isDisabled, setIsDisabled] = useState(true);
-  console.log(useParams());
 
   useEffect(() => {
-    if (id_ciclo) {
+    if (id_curso) {
       axios
-        .get(`${API_URL}/ciclolectivo/filtrar/id_ciclo/${id_ciclo}`, {
+        .get(`${API_URL}/curso/filtrar/id_curso/${id_curso}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         })
         .then((response) => {
-          const cicloLectivo = response.data[0];
-          setAnio(cicloLectivo.anio);
+          const data = response.data[0];
+          setNombre(data.nombre);
+          setPlan(data.Plan);
         })
         .catch((error) => {
-          console.error("Error al obtener el ciclo lectivo:", error);
+          console.error("Error al obtener el curso:", error);
           Swal.fire(
             "Error",
-            "Hubo un error al obtener los datos del ciclo lectivo",
+            "Hubo un error al obtener los datos del curso",
             "error"
           );
         });
     }
-  }, []);
+  }, [id_curso]);
 
   useEffect(() => {
-    setCicloLectivo({
-      anio: anio,
-    });
-  }, [anio]);
+    setCurso({ nombre });
+  }, [id_curso, nombre]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setCicloLectivo({ anio });
+    setCurso({ nombre });
     axios
-      .put(`${API_URL}/ciclolectivo/actualizar/${id_ciclo}`, cicloLectivo, {
+      .put(`${API_URL}/curso/actualizar/${id_curso}`, curso, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
-      .then((response) => {
+      .then(() => {
         Swal.fire(
           "Datos actualizados",
           "Datos almacenados con éxito",
@@ -63,22 +62,17 @@ const CicloLectivoInfo = () => {
       .catch((error) => {
         if (error.response && error.response.status === 409) {
           Swal.fire(
-            "No se pudo editar el ciclo lectivo",
+            "No se pudo editar el curso",
             `${error.response.data.message}`,
             "warning"
           );
         } else {
-          Swal.fire(
-            "Error",
-            "Hubo un error al editar el ciclo lectivo",
-            "error"
-          );
+          Swal.fire("Error", "Hubo un error al editar el curso", "error");
         }
       });
   };
 
   const handleEdit = () => {
-    // si isDisabled es true, se cambia a false, y viceversa
     setIsDisabled(!isDisabled);
   };
 
@@ -94,25 +88,17 @@ const CicloLectivoInfo = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${API_URL}/cicloLectivo/eliminar/${id_ciclo}`, {
+          .delete(`${API_URL}/curso/eliminar/${id_curso}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           })
-          .then((response) => {
-            Swal.fire(
-              "¡Eliminado!",
-              "El ciclo lectivo ha sido eliminado.",
-              "success"
-            );
-            navigate("/ciclolectivo");
+          .then(() => {
+            Swal.fire("¡Eliminado!", "El curso ha sido eliminado.", "success");
+            navigate("/cursos");
           })
-          .catch((error) => {
-            Swal.fire(
-              "Error",
-              "Hubo un error al eliminar el ciclo lectivo",
-              "error"
-            );
+          .catch(() => {
+            Swal.fire("Error", "Hubo un error al eliminar el curso", "error");
           });
       }
     });
@@ -120,38 +106,42 @@ const CicloLectivoInfo = () => {
 
   return (
     <div className="w-full h-fit relative my-1 mx-4">
-      <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
+      <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
         <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
-          Datos del Ciclo Lectivo
+          Datos del Curso
         </h1>
         <form onSubmit={handleSubmit}>
+          <label className="text-primary">
+            Plan: {plan.codigo} - <span>{plan.descripcion}</span>
+          </label>
           <div className="relative mt-4 mb-6">
             <input
-              id="anio"
+              id="nombre"
               className="block py-0 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
-              value={anio}
-              type="number"
+              value={nombre}
+              type="text"
               autoComplete="off"
-              name="anio"
-              onChange={(e) => setAnio(e.target.value.toUpperCase())}
+              name="nombre"
+              onChange={(e) => setNombre(e.target.value)}
               required
               disabled={isDisabled}
             />
             <label
-              htmlFor="anio"
+              htmlFor="nombre"
               className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${
-                anio ? "-translate-y-6 scale-75" : "-translate-y-1 scale-100"
+                nombre ? "-translate-y-6 scale-75" : "-translate-y-1 scale-100"
               } top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
             >
-              Año:
+              Nombre del Curso:
             </label>
           </div>
+
           <div className="flex justify-between">
             <div>
               <button
                 type="button"
-                onClick={() => handleEdit()}
-                className={`text-xs sm:text-sm lg:text-base z-10 border  p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r ease-in duration-300 ${
+                onClick={handleEdit}
+                className={`text-xs sm:text-sm lg:text-base z-10 border p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r ease-in duration-300 ${
                   isDisabled
                     ? "border-info from-info to-primary"
                     : "border-warning from-warning to-yellow-500"
@@ -168,7 +158,7 @@ const CicloLectivoInfo = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/ciclolectivo")}
+                onClick={() => navigate("/cursos")}
                 className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
                 hidden={!isDisabled}
               >
@@ -176,12 +166,12 @@ const CicloLectivoInfo = () => {
               </button>
             </div>
             <button
-              onClick={() => handleDelete()}
+              onClick={handleDelete}
               type="button"
               className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
               hidden={isDisabled}
             >
-              Eliminar Ciclo Lectivo
+              Eliminar Curso
             </button>
           </div>
         </form>
@@ -190,4 +180,4 @@ const CicloLectivoInfo = () => {
   );
 };
 
-export default CicloLectivoInfo;
+export default CursoInfo;

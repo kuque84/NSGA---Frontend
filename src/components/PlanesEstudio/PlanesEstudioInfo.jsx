@@ -5,54 +5,58 @@ import settings from "../../Config/index";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const CicloLectivoInfo = () => {
-  const [cicloLectivo, setCicloLectivo] = useState({});
-  const [anio, setAnio] = useState("");
+const PlanEstudioInfo = () => {
+  const [planEstudio, setPlanEstudio] = useState({});
+  const [codigo, setCodigo] = useState("");
+  const [descripcion, setDescripcion] = useState("");
   const API_URL = settings.API_URL;
   const navigate = useNavigate();
-  const { id_ciclo } = useParams();
+  const { id_plan } = useParams();
   const [isDisabled, setIsDisabled] = useState(true);
-  console.log(useParams());
+  console.log("id_plan: ", id_plan);
+  console.log("useParams: ", useParams());
 
   useEffect(() => {
-    if (id_ciclo) {
+    console.log("ID del plan de estudio:", id_plan);
+    if (id_plan) {
       axios
-        .get(`${API_URL}/ciclolectivo/filtrar/id_ciclo/${id_ciclo}`, {
+        .get(`${API_URL}/plan/filtrar/id_plan/${id_plan}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         })
         .then((response) => {
-          const cicloLectivo = response.data[0];
-          setAnio(cicloLectivo.anio);
+          const plan = response.data[0];
+          console.log(plan);
+          setCodigo(plan.codigo);
+          setDescripcion(plan.descripcion);
         })
         .catch((error) => {
-          console.error("Error al obtener el ciclo lectivo:", error);
+          console.error("Error al obtener el plan de estudio:", error);
           Swal.fire(
             "Error",
-            "Hubo un error al obtener los datos del ciclo lectivo",
+            "Hubo un error al obtener los datos del plan de estudio",
             "error"
           );
         });
     }
-  }, []);
+  }, [id_plan]);
 
   useEffect(() => {
-    setCicloLectivo({
-      anio: anio,
-    });
-  }, [anio]);
+    setPlanEstudio({ codigo, descripcion });
+  }, [id_plan, codigo, descripcion]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    setCicloLectivo({ anio });
+    setPlanEstudio({ codigo, descripcion });
+
     axios
-      .put(`${API_URL}/ciclolectivo/actualizar/${id_ciclo}`, cicloLectivo, {
+      .put(`${API_URL}/plan/actualizar/${id_plan}`, planEstudio, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
-      .then((response) => {
+      .then(() => {
         Swal.fire(
           "Datos actualizados",
           "Datos almacenados con éxito",
@@ -63,14 +67,14 @@ const CicloLectivoInfo = () => {
       .catch((error) => {
         if (error.response && error.response.status === 409) {
           Swal.fire(
-            "No se pudo editar el ciclo lectivo",
+            "No se pudo editar el plan de estudio",
             `${error.response.data.message}`,
             "warning"
           );
         } else {
           Swal.fire(
             "Error",
-            "Hubo un error al editar el ciclo lectivo",
+            "Hubo un error al editar el plan de estudio",
             "error"
           );
         }
@@ -78,7 +82,6 @@ const CicloLectivoInfo = () => {
   };
 
   const handleEdit = () => {
-    // si isDisabled es true, se cambia a false, y viceversa
     setIsDisabled(!isDisabled);
   };
 
@@ -94,23 +97,23 @@ const CicloLectivoInfo = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`${API_URL}/cicloLectivo/eliminar/${id_ciclo}`, {
+          .delete(`${API_URL}/plan/eliminar/${id_plan}`, {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           })
-          .then((response) => {
+          .then(() => {
             Swal.fire(
               "¡Eliminado!",
-              "El ciclo lectivo ha sido eliminado.",
+              "El plan de estudio ha sido eliminado.",
               "success"
             );
-            navigate("/ciclolectivo");
+            navigate("/planesestudio");
           })
-          .catch((error) => {
+          .catch(() => {
             Swal.fire(
               "Error",
-              "Hubo un error al eliminar el ciclo lectivo",
+              "Hubo un error al eliminar el plan de estudio",
               "error"
             );
           });
@@ -120,38 +123,61 @@ const CicloLectivoInfo = () => {
 
   return (
     <div className="w-full h-fit relative my-1 mx-4">
-      <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
+      <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop-filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
         <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
-          Datos del Ciclo Lectivo
+          Datos del Plan de Estudio
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="relative mt-4 mb-6">
             <input
-              id="anio"
+              id="codigo"
               className="block py-0 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
-              value={anio}
-              type="number"
+              value={codigo}
+              type="text"
               autoComplete="off"
-              name="anio"
-              onChange={(e) => setAnio(e.target.value.toUpperCase())}
+              name="codigo"
+              onChange={(e) => setCodigo(e.target.value)}
               required
               disabled={isDisabled}
             />
             <label
-              htmlFor="anio"
+              htmlFor="codigo"
               className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${
-                anio ? "-translate-y-6 scale-75" : "-translate-y-1 scale-100"
+                codigo ? "-translate-y-6 scale-75" : "-translate-y-1 scale-100"
               } top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
             >
-              Año:
+              Codigo:
+            </label>
+          </div>
+          <div className="relative mt-4 mb-6">
+            <input
+              id="descripcion"
+              className="block py-0 px-0 w-full text-base text-secondary bg-transparent border-0 border-b-2 border-primary appearance-none focus:outline-none focus:ring-0 focus:border-secondary peer"
+              value={descripcion}
+              type="text"
+              autoComplete="off"
+              name="descripcion"
+              onChange={(e) => setDescripcion(e.target.value)}
+              required
+              disabled={isDisabled}
+            />
+            <label
+              htmlFor="descripcion"
+              className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${
+                descripcion
+                  ? "-translate-y-6 scale-75"
+                  : "-translate-y-1 scale-100"
+              } top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
+            >
+              Descripcion:
             </label>
           </div>
           <div className="flex justify-between">
             <div>
               <button
                 type="button"
-                onClick={() => handleEdit()}
-                className={`text-xs sm:text-sm lg:text-base z-10 border  p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r ease-in duration-300 ${
+                onClick={handleEdit}
+                className={`text-xs sm:text-sm lg:text-base z-10 border p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r ease-in duration-300 ${
                   isDisabled
                     ? "border-info from-info to-primary"
                     : "border-warning from-warning to-yellow-500"
@@ -168,7 +194,7 @@ const CicloLectivoInfo = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/ciclolectivo")}
+                onClick={() => navigate("/planesestudio")}
                 className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
                 hidden={!isDisabled}
               >
@@ -176,12 +202,12 @@ const CicloLectivoInfo = () => {
               </button>
             </div>
             <button
-              onClick={() => handleDelete()}
+              onClick={handleDelete}
               type="button"
               className="ml-3 text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-danger to-red-500 ease-in duration-300"
               hidden={isDisabled}
             >
-              Eliminar Ciclo Lectivo
+              Eliminar Plan
             </button>
           </div>
         </form>
@@ -190,4 +216,4 @@ const CicloLectivoInfo = () => {
   );
 };
 
-export default CicloLectivoInfo;
+export default PlanEstudioInfo;
