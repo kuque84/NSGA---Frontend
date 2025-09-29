@@ -7,6 +7,7 @@ export default defineConfig({
   server: {
     port: 80,
     host: true,
+    allowedHosts: ["nsga.ipem168.local"],
     mimeTypes: {
       js: "application/javascript",
     },

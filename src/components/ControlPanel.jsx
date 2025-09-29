@@ -56,7 +56,7 @@ const ControlPanel = () => {
         <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
           Sección de Exámenes
         </h1>
-        {userRole <= 3 ? (
+        {userRole <= 5 ? (
           <>
             <button
               onClick={() => navigate("/turnosexamen")}
