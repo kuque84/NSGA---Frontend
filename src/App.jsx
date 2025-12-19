@@ -45,6 +45,7 @@ import TurnoExamen from "./components/TurnoExamen/TurnoExamen";
 import TurnoExamenInfo from "./components/TurnoExamen/TurnoExamenInfo";
 import TurnoExamenCrear from "./components/TurnoExamen/TurnoExamenCrear";
 import ResumenExamen from "./components/Examenes/ResumenExamen";
+import AnalisisRiesgo from "./components/Riesgo/AnalisisRiesgo";
 
 const App = () => {
   return (
@@ -351,6 +352,15 @@ const App = () => {
           element={
             <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
               <ResumenExamen />
+            </div>
+          }
+        />
+
+        <Route
+          path="/analisisRiesgo"
+          element={
+            <div className="print:hidden text-base min-h-[80vh] flex justify-center items-start bg-cover">
+              <AnalisisRiesgo />
             </div>
           }
         />

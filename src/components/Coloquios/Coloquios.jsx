@@ -12,9 +12,29 @@ import {
 import Swal from "sweetalert2";
 import ActaColoquio from "./ActaColoquio";
 import IncsribirColoquio from "./InscribirColoquio";
+import ModalCargaMasiva from "./ModalCargaMasiva";
 import { use } from "react";
+import settings from "../../Config/index";
 
 const Coloquios = () => {
+  const userRole = localStorage.getItem("id_rol"); // Obtiene el rol directamente
+
+  // Convertimos a número para la comparación, ya que localStorage devuelve string
+  const roleAsNumber = parseInt(userRole, 10);
+
+  // Condición de Visibilidad: Permisos de alto nivel (Roles 1 o 2).
+  // Usaremos la condición que solicitaste (menor a 3)
+  const canUpload = !isNaN(roleAsNumber) && roleAsNumber < 3;
+
+  // Estado para controlar la apertura del modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // OBTENER ID_DOCENTE (Necesario para el formulario)
+  // El ID del docente probablemente está en localStorage o en otro Context.
+  // Si no está en localStorage, esta parte deberá ser adaptada. Asumiremos por ahora que
+  // el formulario no necesita el ID del docente para el contexto (lo pasamos como null).
+  const docenteId = null; // Reemplazar con el valor real si está disponible en localStorage (ej: localStorage.getItem("id_docente"))
+
   const [coloquio, setColoquio] = useState([]);
   const [actadecoloquio, setActaDeColoquio] = useState([]);
 
@@ -52,7 +72,7 @@ const Coloquios = () => {
     const cicloLectivoData = await fetchCicloByTurno();
     //console.log('Ciclo lectivo:', cicloLectivoData);
     setCicloLectivo(cicloLectivoData);
-    setIdCiclo(cicloLectivoData[1].id_ciclo); // Selecciona automáticamente el primer ciclo lectivo disponible
+    setIdCiclo(cicloLectivoData[0].id_ciclo); // Selecciona automáticamente el primer ciclo lectivo disponible
     console.table(cicloLectivoData);
     console.log("ID Ciclo lectivo:", id_ciclo);
   };
@@ -233,13 +253,54 @@ const Coloquios = () => {
     }
     console.log("Coloquio:", coloquio);
   };
+  // Función para manejar la impresión/descarga de la Sábana de Coloquios
+  const handlePrintSabana = () => {
+    const token = localStorage.getItem("token");
+    if (!id_turno || !id_ciclo || !token) return;
+
+    // URL SIMPLE CON FILTROS AMPLIOS
+    const baseUrl = `${settings.API_URL}/inscripcion/coloquios/sabana-pdf/${id_turno}/${id_ciclo}`;
+    const downloadUrl = `${baseUrl}?token=${token}`;
+
+    // Abre la ventana, el backend envía el PDF.
+    window.open(downloadUrl, "_blank");
+  };
 
   return (
     <div className="relative justify-start w-full max-w-7xl h-fit my-1 mx-4">
       <div className="bg-sky-100 border border-secondary rounded-md p-8 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
-        <h1 className="print:block bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
-          Coloquios
-        </h1>
+        <div className="flex justify-center items-center px-4">
+          {/* className="flex justify-between items-center px-4 */}
+          <h1 className="print:block bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
+            Coloquios - CL:{" "}
+            {cicloLectivo.length > 0 &&
+              cicloLectivo.find((c) => c.id_ciclo === id_ciclo)?.anio}
+          </h1>
+          {/* BOTÓN DE CARGA MASIVA (RENDERIZADO CONDICIONAL: Rol < 3) */}
+          {canUpload && (
+            // Contenedor de botones de gestión
+            <>
+              {/* BOTÓN DE CARGA MASIVA */}
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="bg-yellow-600 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out whitespace-nowrap text-sm ml-4"
+              >
+                Carga Masiva
+              </button>
+
+              {/* NUEVO BOTÓN PARA IMPRESIÓN SÁBANA */}
+              {id_turno &&
+                id_ciclo && ( // Se muestra si canUpload es true Y los filtros están seleccionados
+                  <button
+                    onClick={handlePrintSabana}
+                    className="bg-primary hover:bg-teal-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out whitespace-nowrap text-sm ml-4"
+                  >
+                    <i className="fa fa-print mr-2"></i> Imprimir Sábana
+                  </button>
+                )}
+            </>
+          )}
+        </div>
         <div className="relative mt-4 mb-6">
           <select
             onChange={(e) => setIdCurso(e.target.value)}
@@ -318,6 +379,18 @@ const Coloquios = () => {
       </div>
       {examen.length > 0 && (
         <ActaColoquio examen={examen} actadeexamen={actadeexamen} />
+      )}
+      {/* 3. ENTRADA DEL MODAL (DEBE IR FUERA DEL DIV PRINCIPAL) */}
+      {/* Solo se renderiza si el usuario tiene permiso */}
+      {canUpload && (
+        <ModalCargaMasiva
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          docenteId={docenteId}
+          // Pasamos los IDs de contexto actuales si fuera necesario precargar el modal
+          id_ciclo={id_ciclo}
+          id_curso={id_curso}
+        />
       )}
     </div>
   );

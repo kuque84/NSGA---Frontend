@@ -180,7 +180,8 @@ const AlumnosRac = () => {
                           {examen.Previa.Curso.nombre}
                         </td>
                         <td className="text-center border-dotted border-2 border-primary">
-                          {examen.Previa.Condicion.nombre}
+                          {/* {examen.Previa.Condicion.nombre} */}
+                          {examen.FechaExamen.Condicion.nombre}
                         </td>
                         <td className="text-center border-dotted border-2 border-primary">
                           {examen.Calificacion?.calificacion ?? "Aus."}

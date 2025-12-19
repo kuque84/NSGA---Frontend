@@ -76,6 +76,12 @@ const ControlPanel = () => {
             >
               Resumen de Inscripciones a Exámenes
             </button>
+            <button
+              onClick={() => navigate("/analisisRiesgo")}
+              className="mr-3 text-xs sm:text-sm lg:text-base z-10 border border-primary p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300"
+            >
+              Análisis de Riesgo
+            </button>
           </>
         ) : (
           <span className="text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-danger dark:text-white rounded-md">

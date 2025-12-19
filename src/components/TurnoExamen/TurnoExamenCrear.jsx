@@ -15,8 +15,10 @@ const TurnoExamenCrear = () => {
   const fetchCicloLectivoData = async () => {
     try {
       const data = await fetchCicloLectivos();
+      // Ordenar por año de forma descendente (el más reciente primero)
       const sortedData = data.sort((a, b) => b.anio - a.anio);
       setCicloLectivo(sortedData);
+      // Seleccionar automáticamente el ID del ciclo más reciente
       if (sortedData.length > 0) {
         setIdCiclo(sortedData[0].id_ciclo);
       }
@@ -75,7 +77,7 @@ const TurnoExamenCrear = () => {
                 value={id_ciclo}
                 onChange={(e) => setIdCiclo(e.target.value)}
               >
-                <option value="">Selecciona un ciclo lectivo</option>
+                {/* Nota: No es necesario el <option value="">...</option> ya que seleccionas automáticamente el más reciente. */}
                 {cicloLectivo.map((ciclo) => (
                   <option key={ciclo.id_ciclo} value={ciclo.id_ciclo}>
                     {ciclo.anio}
@@ -85,7 +87,8 @@ const TurnoExamenCrear = () => {
               <label
                 htmlFor="cicloLectivo"
                 className={`peer-focus:font-medium absolute text-sm text-primary duration-300 transform ${
-                  cicloLectivo
+                  // La lógica para la clase del label puede ser simplificada si id_ciclo ya tiene un valor por defecto
+                  id_ciclo
                     ? "-translate-y-6 scale-75"
                     : "-translate-y-1 scale-100"
                 } top-1 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-secondary peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0`}
@@ -101,7 +104,8 @@ const TurnoExamenCrear = () => {
                 type="text"
                 autoComplete="off"
                 name="nombre"
-                onChange={(e) => setNombre(e.target.value.toUpperCase)}
+                // 🚨 CORRECCIÓN: Ejecutar la función con ()
+                onChange={(e) => setNombre(e.target.value.toUpperCase())}
                 required
               />
               <label
