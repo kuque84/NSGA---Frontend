@@ -78,11 +78,14 @@ const ActaExamen = ({ examen, actadeexamen, onEliminarInscripcion }) => {
         },
       })
       .then((response) => {
-        Swal.fire(
-          "Datos actualizados",
-          "Datos almacenados con éxito",
-          "success"
-        );
+        Swal.fire({
+          title: "Datos actualizados",
+          text: "Datos almacenados con éxito",
+          icon: "success",
+          timer: 2500, // ⏱ Se cierra a los 3 segundos
+          timerProgressBar: true, // 🔄 Barra de progreso del tiempo
+          showConfirmButton: true, // 🙈 Oculta el botón de "OK"
+        });
       })
       .catch((error) => {
         console.error("Error al actualizar el acta:", error.message);
