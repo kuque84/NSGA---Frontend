@@ -41,16 +41,16 @@ const AlumnosPrevias = ({ alumno }) => {
   const [planDefaultLabel, setPlanDefaultLabel] =
     useState("Selecciona un Plan");
   const [cursoDefaultLabel, setCursoDefaultLabel] = useState(
-    "Selecciona un Curso"
+    "Selecciona un Curso",
   );
   const [materiaDefaultLabel, setMateriaDefaultLabel] = useState(
-    "Selecciona una Materia"
+    "Selecciona una Materia",
   );
   const [condicionDefaultLabel, setCondicionDefaultLabel] = useState(
-    "Selecciona una Condición"
+    "Selecciona una Condición",
   );
   const [cicloDefaultLabel, setCicloDefaultLabel] = useState(
-    "Selecciona un Ciclo Lectivo"
+    "Selecciona un Ciclo Lectivo",
   );
 
   const userRole = localStorage.getItem("id_rol");
@@ -194,7 +194,7 @@ const AlumnosPrevias = ({ alumno }) => {
         Swal.fire(
           "Datos actualizados",
           "Datos almacenados con éxito",
-          "success"
+          "success",
         );
         resetPreviaFields();
         handleAgregarPrevia();
@@ -205,13 +205,13 @@ const AlumnosPrevias = ({ alumno }) => {
           Swal.fire(
             "No se pudo guardar la previa",
             `${error.response.data.message}`,
-            "info"
+            "info",
           );
         } else if (error.response && error.response.status === 409) {
           Swal.fire(
             "No se pudo guardar la previa",
             `${error.response.data.message}`,
-            "error"
+            "error",
           );
         } else {
           Swal.fire("Error", "Hubo un error al guardar la previa", "error");
@@ -240,7 +240,7 @@ const AlumnosPrevias = ({ alumno }) => {
           .then((response) => {
             Swal.fire("¡Eliminado!", "La previa ha sido eliminada.", "success");
             setPrevia((previas) =>
-              previas.filter((previa) => previa.id_previa !== id_previa)
+              previas.filter((previa) => previa.id_previa !== id_previa),
             );
             setDummyState(!dummyState);
           })
@@ -254,10 +254,9 @@ const AlumnosPrevias = ({ alumno }) => {
   const handleImprimirPermiso = async (id_alumno) => {
     console.log("Imprimir permiso de examen", id_alumno);
 
-    // Obtener los ciclos lectivos donde el alumno tiene inscripciones
+    // 1. Obtener ciclos lectivos
     const cicloLectivoData = await fetchCicloLectivos(id_alumno);
-    //console.log("Ciclo lectivo data:", cicloLectivoData);
-    if (cicloLectivoData.length === 0) {
+    if (!cicloLectivoData || cicloLectivoData.length === 0) {
       Swal.fire({
         icon: "info",
         title: "No hay ciclos lectivos disponibles",
@@ -266,7 +265,21 @@ const AlumnosPrevias = ({ alumno }) => {
       });
       return;
     }
-    // Obtener los turnos disponibles para el ciclo lectivo seleccionado
+
+    // Ordenar de mayor a menor id_ciclo
+    const sortedCiclos = [...cicloLectivoData].sort(
+      (a, b) => b.id_ciclo - a.id_ciclo,
+    );
+
+    // Armar opciones (con claves tipo string)
+    const cicloLectivoOptions = {};
+    sortedCiclos.forEach((ciclo) => {
+      cicloLectivoOptions[String(ciclo.id_ciclo)] = String(ciclo.anio);
+    });
+
+    const defaultCicloId = String(sortedCiclos[0].id_ciclo);
+
+    // Función auxiliar para traer turnos
     const fetchTurnoData = async (id_ciclo) => {
       try {
         const response = await axios.get(
@@ -275,50 +288,64 @@ const AlumnosPrevias = ({ alumno }) => {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
         return response.data;
       } catch (error) {
         console.error("Error al obtener los turnos:", error);
+        return [];
       }
     };
 
-    const cicloLectivoOptions = cicloLectivoData.reduce((options, ciclo) => {
-      options["Z" + ciclo.id_ciclo] = ciclo.anio;
-      return options;
-    }, {});
-
+    // --- DIÁLOGO 1: Ciclo Lectivo con ID más alto preseleccionado ---
     const { value: id_ciclo } = await Swal.fire({
       title: "Seleccione el ciclo lectivo",
       input: "select",
       inputOptions: cicloLectivoOptions,
-      inputPlaceholder: "Seleccione el ciclo lectivo",
+      inputValue: defaultCicloId, // Autoselecciona el ID más alto
       showCancelButton: true,
-      allowOutsideClick: false, // Deshabilitar clic fuera del modal
+      allowOutsideClick: false,
     });
 
     if (id_ciclo) {
-      const turnoData = await fetchTurnoData(id_ciclo.slice(1));
-      const turnoOptions = turnoData.reduce((options, turno) => {
-        options[turno.id_turno] = turno.nombre;
-        return options;
-      }, {});
+      const turnos = await fetchTurnoData(id_ciclo);
 
+      if (!turnos || turnos.length === 0) {
+        Swal.fire({
+          icon: "info",
+          title: "Sin turnos",
+          text: "No se encontraron turnos para el ciclo lectivo seleccionado.",
+        });
+        return;
+      }
+
+      // Ordenar de mayor a menor id_turno
+      const sortedTurnos = [...turnos].sort((a, b) => b.id_turno - a.id_turno);
+
+      const turnoOptions = {};
+      sortedTurnos.forEach((turno) => {
+        turnoOptions[String(turno.id_turno)] = turno.nombre;
+      });
+
+      const defaultTurnoId = String(sortedTurnos[0].id_turno);
+
+      // --- DIÁLOGO 2: Turno con ID más alto preseleccionado ---
       const { value: id_turno } = await Swal.fire({
         title: "Seleccione el turno",
         input: "select",
         inputOptions: turnoOptions,
-        inputPlaceholder: "Seleccione el turno",
+        inputValue: defaultTurnoId, // Autoselecciona el ID más alto
         showCancelButton: true,
-        allowOutsideClick: false, // Deshabilitar clic fuera del modal
+        allowOutsideClick: false,
       });
 
-      //post para inscribir al alumno
-      console.log("Realizar Permiso:");
-      console.table(id_alumno, id_turno);
-      const endpoint = `/acta/permiso/pdf/${id_alumno}/${id_turno}`;
-      const filename = `permiso_examen_${alumno.apellidos}_${alumno.nombres}_${alumno.dni}_turno_${id_turno}.pdf`;
-      downloadPDF(endpoint, filename);
+      if (id_turno) {
+        console.log("Realizar Permiso:");
+        console.table(id_alumno, id_turno);
+        const endpoint = `/acta/permiso/pdf/${id_alumno}/${id_turno}`;
+        const filename = `permiso_examen_${alumno.apellidos}_${alumno.nombres}_${alumno.dni}_turno_${id_turno}.pdf`;
+        downloadPDF(endpoint, filename);
+      }
     }
   };
 
@@ -446,8 +473,14 @@ const AlumnosPrevias = ({ alumno }) => {
                       <td
                         className={`text-center border-dotted border-2 border-primary`}
                       >
-                        {previa.Materia.nombre}
-                        {previa.Calificacion.aprobado ? " - APROBADO" : ""}
+                        {/* al posar el puntero sobre la materia, mostrar el id de la previa*/}
+                        <div className="relative group">
+                          {previa.Materia.nombre}
+                          {previa.Calificacion.aprobado ? " - APROBADO" : ""}
+                          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:flex items-center justify-center px-2 py-1 text-xs text-white bg-primary bg-opacity-80 rounded">
+                            ID de la Previa: {previa.id_previa}
+                          </div>
+                        </div>
                       </td>
                       <td className="text-center border-dotted border-2 border-primary">
                         {previa.Condicion.nombre}

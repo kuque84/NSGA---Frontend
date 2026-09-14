@@ -72,7 +72,7 @@ const Coloquios = () => {
     const cicloLectivoData = await fetchCicloByTurno();
     //console.log('Ciclo lectivo:', cicloLectivoData);
     setCicloLectivo(cicloLectivoData);
-    setIdCiclo(cicloLectivoData[0].id_ciclo); // Selecciona automáticamente el primer ciclo lectivo disponible
+    setIdCiclo(cicloLectivoData[1].id_ciclo); // Selecciona automáticamente el primer ciclo lectivo disponible
     console.table(cicloLectivoData);
     console.log("ID Ciclo lectivo:", id_ciclo);
   };
@@ -84,9 +84,8 @@ const Coloquios = () => {
   useEffect(() => {
     const loadCurso = async () => {
       console.log("Load Curso");
-      const cursoData = await fetchCursoByCicloLectivoOnInscripcionCurso(
-        id_ciclo
-      );
+      const cursoData =
+        await fetchCursoByCicloLectivoOnInscripcionCurso(id_ciclo);
       console.table(cursoData);
       setCurso(cursoData);
     };
@@ -126,7 +125,7 @@ const Coloquios = () => {
         const turnoData = await fetchTurnoByCiclo(id_ciclo);
         // Filtrar los turnos para incluir solo "DICIEMBRE" y "FEBRERO"
         const filteredTurnoData = turnoData.filter(
-          (turno) => turno.nombre === "DICIEMBRE" || turno.nombre === "FEBRERO"
+          (turno) => turno.nombre === "DICIEMBRE" || turno.nombre === "FEBRERO",
         );
         setTurno(filteredTurnoData);
         if (filteredTurnoData.length > 0) {
@@ -167,7 +166,7 @@ const Coloquios = () => {
           const alumnosData = await fetchAlumnosporCurso(
             id_ciclo,
             id_curso,
-            id_division
+            id_division,
           );
           console.log("Alumnos:", alumnosData);
           setAlumnosPorCurso(alumnosData);
@@ -201,7 +200,7 @@ const Coloquios = () => {
         id_division,
         id_turno,
         id_condicion,
-        id_materia
+        id_materia,
       );
       //console.log('Datos de acta de examen:', data);
       if (data.length === 0) {
@@ -235,7 +234,7 @@ const Coloquios = () => {
         id_ciclo,
         id_turno,
         id_condicion,
-        id_curso
+        id_curso,
       );
       console.log("Datos de materia:", data);
       if (data.length === 0) {

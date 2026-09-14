@@ -115,6 +115,32 @@ const ControlPanel = () => {
           </span>
         )}
       </div>
+      <div className="bg-sky-100 border border-secondary rounded-md pt-8 px-8 pb-4 shadow-lg backdrop:filter backdrop-blur-sm bg-opacity-60 relative font-semibold mt-4 mb-6">
+        <h1 className="bg-gradient-to-r from-primary to-secondary text-transparent bg-clip-text text-xl sm:text-3xl lg:text-4xl text-center tracking-wide py-2">
+          Comunicación Masiva
+        </h1>
+        {userRole <= 1 ? (
+          <>
+            <button
+              onClick={() => {
+                const { protocol, hostname } = window.location;
+                window.open(
+                  `${protocol}//${hostname}:3009`,
+                  "_blank",
+                  "noopener,noreferrer",
+                );
+              }}
+              className="mr-3 text-xs sm:text-sm lg:text-base z-10 border border-primary p-3 my-4 text-black dark:text-white hover:text-white dark:hover:text-black rounded-md hover:bg-gradient-to-r from-primary to-secondary ease-in duration-300"
+            >
+              WSP Dispatcher Studio
+            </button>
+          </>
+        ) : (
+          <span className="text-xs sm:text-sm lg:text-base z-10 border border-danger p-3 my-4 text-danger dark:text-white rounded-md">
+            No tiene permisos para acceder a esta sección
+          </span>
+        )}
+      </div>
     </div>
   );
 };

@@ -85,7 +85,7 @@ const AlumnosInscripcion = ({ previa }) => {
         const fechaExamen = await fetchFechaExamenInscripcion(
           id_materia,
           id_turno,
-          id_condicion
+          id_condicion,
         );
         const inscripcion = {
           id_previa: previa.id_previa,
